@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Promo Selector</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      margin: 0;
+      padding: 2em;
+    }
+
+    h1 {
+      text-align: center;
+      color: #0056b3;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 2em;
+    }
+
+    .question {
+      margin-bottom: 2em;
+    }
+
+    .question p {
+      font-size: 1.2em;
+      margin-bottom: 1em;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .result {
+      background-color: #e6f4ea;
+      padding: 1em;
+      margin-top: 1em;
+      border-left: 6px solid #28a745;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .disclaimer {
+      font-weight: normal;
+      font-size: 0.95em;
+      margin-top: 0.75em;
+      color: #555;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 0.75em;
+      margin-bottom: 0.75em;
+      font-size: 1em;
+      border: none;
+      border-radius: 4px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Mobile Promo Flow Tool</h1>
+
+    <div id="step1" class="question">
+      <p>Is the customer a new internet subscriber or under 90 days?</p>
+      <button onclick="goToStep('under90')">Yes</button>
+      <button onclick="goToStep('over90')">No</button>
+    </div>
+
+    <div id="under90" class="question hidden">
+      <p>How many mobile lines is the customer adding?</p>
+      <button onclick="showResult('$0 per line for 12 months with 1 line (Full Price: $45/mo) - Promo: HEYITSFREE')">1 Line</button>
+      <button onclick="showResult('$30 for 2 lines ($15/line) (Full Price: $60/mo) - Promo: HEYITSFREE')">2 Lines</button>
+      <button onclick="showResult('$60 for 3 lines ($20/line) (Full Price: $90/mo) - Promo: HEYITSFREE')">3 Lines</button>
+      <button onclick="showResult('$90 for 4 lines ($22.50/line) (Full Price: $120/mo) - Promo: HEYITSFREE')">4 Lines</button>
+    </div>
+
+    <div id="over90" class="question hidden">
+      <p>Is there a $10 Deal active?</p>
+      <button onclick="goToStep('boostYes')">Yes</button>
+      <button onclick="goToStep('boostNo')">No</button>
+    </div>
+
+    <div id="boostYes" class="question hidden">
+      <p>How many mobile lines?</p>
+      <button onclick="showResult('$10 for 1 line (Full Price: $45/mo) - Promo: ONEFOR10')">1 Line</button>
+      <button onclick="showResult('$36.67 for 2 lines (Full Price: $60/mo) - Promo: ONEFOR10')">2 Lines</button>
+      <button onclick="showResult('$66.67 for 3 lines (Full Price: $90/mo) - Promo: ONEFOR10')">3 Lines</button>
+      <button onclick="showResult('$96.67 for 4 lines (Full Price: $120/mo) - Promo: ONEFOR10')">4 Lines</button>
+    </div>
+
+    <div id="boostNo" class="question hidden">
+      <p>How many mobile lines?</p>
+      <button onclick="showResult('$25 for 1 line (Full Price: $45/mo) - Promo: ONEFOR25')">1 Line</button>
+      <button onclick="showResult('$45 for 2 lines (Full Price: $60/mo) - Promo: BOGO')">2 Lines</button>
+      <button onclick="showResult('$75 for 3 lines (Full Price: $90/mo) - Promo: BOGO + Add a Line')">3 Lines</button>
+      <button onclick="showResult('$100 for 4 lines (Full Price: $120/mo) - Promo: HAPPYFAM')">4 Lines</button>
+    </div>
+
+    <div id="result" class="result hidden">
+      <span id="offerText"></span>
+      <div class="disclaimer">
+        <p>First bill will not include the promotion and the customers will be responsible for the full monthly device payment.</p>
+        <p>Trade-ins processed via Asurion; credits begin within 2 bill cycles.</p>
+        <p>Port-in or Financing a Device is required to qualify for promotional pricing.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function goToStep(step) {
+      document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
+      document.getElementById(step).classList.remove('hidden');
+      document.getElementById('result').classList.add('hidden');
+    }
+
+    function showResult(text) {
+      document.getElementById('offerText').innerText = 'Recommended Offer: ' + text;
+      document.getElementById('result').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
