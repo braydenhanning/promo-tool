@@ -128,7 +128,17 @@
 <button onclick="setProtection('MDP+ ($18/month)')">Yes</button>
 <button onclick="setProtection('No Protection')">No</button>
 </div>
-</div>
+<div class="question hidden" id="devicePrompt"><p>Would the customer like to add a mobile device?</p>
+<button onclick="goToStep('brandSelect')">Yes</button>
+<button onclick="goToStep('protectionPrompt')">No</button>
+</div><div class="question hidden" id="brandSelect"><p>Which device brand is the customer interested in?</p>
+<button onclick="setDevicePromo('iPhone 16: Free with $225+ trade-in on Unlimited Plan (Financing only). Limit 2/account.'); goToStep('protectionPrompt')">Apple</button>
+<button onclick="setDevicePromo('Moto Razr 2025: $200 off with promo code SAVE200 (Port-in required, Unlimited or Max plan, financing).'); goToStep('protectionPrompt')">Motorola</button>
+<button onclick="setDevicePromo('No current promotions without trade-in.'); goToStep('protectionPrompt')">Other</button>
+</div><div class="question hidden" id="protectionPrompt"><p>Would the customer like Mobile Device Protection?</p>
+<button onclick="setProtection('MDP+ ($18/month)')">Yes</button>
+<button onclick="setProtection('No Protection')">No</button>
+</div></div>
 <script>
     function goToStep(step) {
       document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
@@ -161,6 +171,35 @@ function setDevicePromo(promo) {
   else if (promo.includes('Samsung')) deviceTotal = 5;
   else if (promo.includes('Motorola')) deviceTotal = 10;
   fullSummary += "\nDevice Deal: " + promo;
+}
+
+function setProtection(option) {
+  protectionTotal = option.includes('MDP+') ? 18 : 0;
+  fullSummary += "\nProtection: " + option;
+  const grandTotal = serviceTotal + deviceTotal + protectionTotal;
+  fullSummary += "\nEstimated Monthly Total: $" + grandTotal;
+  document.getElementById('offerText').innerText = fullSummary;
+}
+</script><script>
+let serviceTotal = 0;
+let deviceTotal = 0;
+let protectionTotal = 0;
+let fullSummary = "";
+
+function showResult(text) {
+  const priceMatch = text.match(/\$\d+/g);
+  serviceTotal = priceMatch ? parseInt(priceMatch[0].replace('$','')) : 0;
+  fullSummary = "Recommended Offer: " + text;
+  document.getElementById('offerText').innerText = fullSummary;
+  document.getElementById('result').classList.remove('hidden');
+  goToStep('devicePrompt');
+}
+
+function setDevicePromo(promo) {
+  if (promo.includes('iPhone 16')) deviceTotal = 0;
+  else if (promo.includes('Moto Razr')) deviceTotal = 5;
+  else deviceTotal = 0;
+  fullSummary += "\nDevice Promo: " + promo;
 }
 
 function setProtection(option) {
