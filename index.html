@@ -230,46 +230,46 @@ function displayFinalResult(deviceAmount) {
 function printResult() {
   const offerText = document.getElementById('offerText').innerText;
   const printWindow = window.open('', '_blank');
-  printWindow.document.write(`
+  printWindow.document.write(\`
     <html>
-    <head>
-      <title>Print Offer</title>
-      <style>
-        @media print {
-          .no-print { display: none; }
-        }
-        body {
-          font-family: sans-serif;
-          padding: 40px;
-          font-size: 18px;
-          line-height: 1.6;
-        }
-        h2 {
-          color: #28a745;
-          text-align: center;
-        }
-        .summary {
-          white-space: pre-wrap;
-          background: #e6f4ea;
-          padding: 20px;
-          border-left: 6px solid #28a745;
-          border-radius: 8px;
-          font-weight: bold;
-          margin-top: 1em;
-        }
-        .logo {
-          display: block;
-          max-width: 200px;
-          margin: 0 auto;
-        }
-      </style>
-    </head>
-    <body>
-      <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png" alt="Optimum Logo" />
-      <h2>Mobile Promo Summary</h2>
-      <div class="summary">${offerText}</div>
-    </body>
-    </html>`);
+      <head>
+        <title>Print Offer</title>
+        <style>
+          @media print {
+            .no-print { display: none; }
+          }
+          body {
+            font-family: sans-serif;
+            padding: 40px;
+            font-size: 18px;
+            line-height: 1.6;
+          }
+          h2 {
+            color: #28a745;
+            text-align: center;
+          }
+          .summary {
+            white-space: pre-wrap;
+            background: #e6f4ea;
+            padding: 20px;
+            border-left: 6px solid #28a745;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 1em;
+          }
+          .logo {
+            display: block;
+            max-width: 200px;
+            margin: 0 auto 20px;
+          }
+        </style>
+      </head>
+      <body>
+        <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png" alt="Optimum Logo" />
+        <h2>Mobile Promo Summary</h2>
+        <div class="summary">\${offerText}</div>
+      </body>
+    </html>\`);
   printWindow.document.close();
   printWindow.focus();
   printWindow.print();
