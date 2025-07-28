@@ -117,10 +117,6 @@
 <p>Trade-ins processed via Asurion; credits begin within 2 bill cycles.</p>
 <p>Port-in or Financing a Device is required to qualify for promotional pricing.</p>
 </div>
-<div style="text-align: center; margin-top: 1.5em;">
-  <button onclick="location.reload()">Start Over</button>
-</div>
-
 </div><div class="question hidden" id="devicePrompt">
 <p>Would the customer like to add a mobile device?</p>
 <button onclick="handleDeviceSelection('no')">No</button>
@@ -170,18 +166,12 @@ function handleDeviceSelection(choice) {
 }
 
 
-
-
 function setDevicePromo(text) {
   fullSummary += "
 Device Promo: " + text;
   if (text.includes("iPhone 15") && text.includes("Up to $500 off")) {
     deviceTotal = 25; // Estimated after-discount value, modify as needed
   }
-}
-
-}
-
 }
 
 
