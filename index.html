@@ -117,47 +117,61 @@
 <p>Trade-ins processed via Asurion; credits begin within 2 bill cycles.</p>
 <p>Port-in or Financing a Device is required to qualify for promotional pricing.</p>
 </div>
-</div><div class="question hidden" id="devicePrompt"><p>Would the customer like to add a mobile device?</p>
-<button onclick="goToStep('brandSelect')">Yes</button>
-<button onclick="goToStep('protectionPrompt')">No</button>
+</div><div class="question hidden" id="devicePrompt">
+<p>Would the customer like to add a mobile device?</p>
+<button onclick="handleDeviceSelection('no')">No</button>
+<button onclick="goToStep('modelSelect')">Yes</button>
 </div><div class="question hidden" id="brandSelect"><p>Which device brand is the customer interested in?</p>
 <button onclick="setDevicePromo('Apple - $0/mo with trade-in'); displayFinalResult()">Apple</button>
 <button onclick="setDevicePromo('Samsung - $5/mo with trade-in'); displayFinalResult()">Samsung</button>
 <button onclick="setDevicePromo('Motorola - $10/mo with trade-in'); displayFinalResult()">Motorola</button>
 </div>
 </div>
-<script>
+<div class="question hidden" id="modelSelect">
+<p>Select a Mobile Device:</p>
+<button onclick="setDevicePromo('iPhone 15 - $0/mo with trade-in'); displayFinalResult(0)">iPhone 15</button>
+<button onclick="setDevicePromo('iPhone 15 Plus - $0/mo with trade-in'); displayFinalResult(0)">iPhone 15 Plus</button>
+<button onclick="setDevicePromo('iPhone 16e - $0/mo with $100+ trade-in'); displayFinalResult(0)">iPhone 16e</button>
+<button onclick="setDevicePromo('iPad (A16) - $10/mo after $200 off'); displayFinalResult(10)">iPad (A16)</button>
+<button onclick="setDevicePromo('iPhone 16 - Free with $225+ trade-in'); displayFinalResult(0)">iPhone 16</button>
+<button onclick="setDevicePromo('Moto Razr 2025 - $15/mo after $200 off'); displayFinalResult(15)">Moto Razr 2025</button>
+</div><script>
 let serviceTotal = 0;
 let deviceTotal = 0;
 let fullSummary = "";
 
 function goToStep(step) {
   document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
-  const stepEl = document.getElementById(step);
-  if (stepEl) stepEl.classList.remove('hidden');
+  const el = document.getElementById(step);
+  if (el) el.classList.remove('hidden');
   if (step !== 'result') document.getElementById('result').classList.add('hidden');
 }
 
 function showResult(text) {
-  const priceMatch = text.match(/\$\d+/g);
-  serviceTotal = priceMatch ? parseInt(priceMatch[0].replace('$','')) : 0;
+  const match = text.match(/\$\d+/g);
+  serviceTotal = match ? parseInt(match[0].replace('$','')) : 0;
   fullSummary = "Recommended Offer: " + text;
   document.getElementById('offerText').innerText = fullSummary;
   document.getElementById('result').classList.remove('hidden');
   goToStep('devicePrompt');
 }
 
-function setDevicePromo(promo) {
-  if (promo.includes('Apple') || promo.includes('iPhone')) deviceTotal = 0;
-  else if (promo.includes('Samsung')) deviceTotal = 5;
-  else if (promo.includes('Motorola') || promo.includes('Moto')) deviceTotal = 10;
-  else deviceTotal = 0;
-  fullSummary += "\nDevice Promo: " + promo;
+function handleDeviceSelection(choice) {
+  if (choice === 'no') {
+    deviceTotal = 0;
+    setDevicePromo('No device added');
+    displayFinalResult(0);
+  }
 }
 
-function displayFinalResult() {
-  const grandTotal = serviceTotal + deviceTotal;
-  fullSummary += "\nEstimated Monthly Total: $" + grandTotal;
+function setDevicePromo(text) {
+  fullSummary += "\nDevice Promo: " + text;
+}
+
+function displayFinalResult(deviceAmount) {
+  deviceTotal = deviceAmount;
+  const total = serviceTotal + deviceTotal;
+  fullSummary += "\nEstimated Monthly Total: $" + total;
   document.getElementById('offerText').innerText = fullSummary;
   goToStep('result');
 }
