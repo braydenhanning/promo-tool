@@ -65,10 +65,10 @@
 
   <div id="step1" class="question">
     <p>How many mobile lines is the customer adding?</p>
-    <button onclick="setServicePromo('1 Line - Promo: HEYITSFREE', 0, 'After 12 months: $45/mo')">1 Line</button>
-    <button onclick="setServicePromo('2 Lines - Promo: HEYITSFREE', 30, 'After 12 months: $60/mo')">2 Lines</button>
-    <button onclick="setServicePromo('3 Lines - Promo: HEYITSFREE', 60, 'After 12 months: $90/mo')">3 Lines</button>
-    <button onclick="setServicePromo('4 Lines - Promo: HEYITSFREE', 90, 'After 12 months: $120/mo')">4 Lines</button>
+    <button onclick="selectLines('1 Line', 45)">1 Line</button>
+    <button onclick="selectLines('2 Lines', 60)">2 Lines</button>
+    <button onclick="selectLines('3 Lines', 90)">3 Lines</button>
+    <button onclick="selectLines('4 Lines', 120)">4 Lines</button>
   </div>
 
   <div id="step2" class="question hidden">
@@ -97,11 +97,13 @@
 </div>
 
 <script>
-  let servicePromo = '', servicePrice = 0, devicePromo = 'None', devicePrice = 0, protectionText = 'None', protectionPrice = 0;
+  let servicePromo = '', servicePrice = 0, devicePromo = 'None', devicePrice = 0, protectionText = 'None', protectionPrice = 0, lineCount = '', linePrice = 0;
 
-  function setServicePromo(promo, price, afterText) {
-    servicePromo = `${promo} ($${price}/mo - ${afterText})`;
-    servicePrice = price;
+  function selectLines(label, monthlyPrice) {
+    lineCount = label;
+    linePrice = monthlyPrice;
+    servicePromo = `${label} - Promo: HEYITSFREE ($${monthlyPrice - (monthlyPrice >= 45 ? 15 : 0)}/mo - After 12 months: $${monthlyPrice}/mo)`;
+    servicePrice = monthlyPrice >= 45 ? monthlyPrice - 15 : 0;
     document.getElementById('step2').classList.remove('hidden');
   }
 
