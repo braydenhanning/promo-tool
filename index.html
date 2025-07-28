@@ -165,9 +165,15 @@ function handleDeviceSelection(choice) {
   }
 }
 
+
 function setDevicePromo(text) {
-  fullSummary += "\nDevice Promo: " + text;
+  fullSummary += "
+Device Promo: " + text;
+  if (text.includes("iPhone 15") && text.includes("Up to $500 off")) {
+    deviceTotal = 25; // Estimated after-discount value, modify as needed
+  }
 }
+
 
 function displayFinalResult(deviceAmount) {
   deviceTotal = deviceAmount;
