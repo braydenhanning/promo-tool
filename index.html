@@ -121,10 +121,11 @@
 <p>Would the customer like to add a mobile device?</p>
 <button onclick="handleDeviceSelection('no')">No</button>
 <button onclick="goToStep('modelSelect')">Yes</button>
-</div><div class="question hidden" id="brandSelect"><p>Which device brand is the customer interested in?</p>
-<button onclick="setDevicePromo('Apple - $0/mo with trade-in'); displayFinalResult()">Apple</button>
-<button onclick="setDevicePromo('Samsung - $5/mo with trade-in'); displayFinalResult()">Samsung</button>
-<button onclick="setDevicePromo('Motorola - $10/mo with trade-in'); displayFinalResult()">Motorola</button>
+</div><div class="question hidden" id="brandSelect">
+<p>Which device brand is the customer interested in?</p>
+<button onclick="goToStep('appleModels')">Apple</button>
+<button onclick="goToStep('samsungModels')">Samsung</button>
+<button onclick="goToStep('motorolaModels')">Motorola</button>
 </div>
 </div>
 <div class="question hidden" id="modelSelect">
@@ -151,16 +152,16 @@ function showResult(text) {
   const match = text.match(/\$\d+/g);
   serviceTotal = match ? parseInt(match[0].replace('$','')) : 0;
   fullSummary = "Recommended Offer: " + text;
-  document.getElementById('offerText').innerText = fullSummary;
-  document.getElementById('result').classList.remove('hidden');
   goToStep('devicePrompt');
 }
 
 function handleDeviceSelection(choice) {
   if (choice === 'no') {
     deviceTotal = 0;
-    setDevicePromo('No device added');
+    fullSummary += "\nDevice Promo: No device added";
     displayFinalResult(0);
+  } else {
+    goToStep('brandSelect');
   }
 }
 
@@ -175,5 +176,19 @@ function displayFinalResult(deviceAmount) {
   document.getElementById('offerText').innerText = fullSummary;
   goToStep('result');
 }
-</script></body>
+</script><div class="question hidden" id="appleModels">
+<p>Select an Apple Device:</p>
+<button onclick="setDevicePromo('iPhone 15 - $0/mo with trade-in'); displayFinalResult(0)">iPhone 15</button>
+<button onclick="setDevicePromo('iPhone 15 Plus - $0/mo with trade-in'); displayFinalResult(0)">iPhone 15 Plus</button>
+<button onclick="setDevicePromo('iPhone 16e - $0/mo with $100+ trade-in'); displayFinalResult(0)">iPhone 16e</button>
+<button onclick="setDevicePromo('iPhone 16 - Free with $225+ trade-in'); displayFinalResult(0)">iPhone 16</button>
+<button onclick="setDevicePromo('iPad (A16) - $10/mo after $200 off'); displayFinalResult(10)">iPad (A16)</button>
+</div><div class="question hidden" id="samsungModels">
+<p>Select a Samsung Device:</p>
+<button onclick="setDevicePromo('Galaxy S23 - $5/mo with trade-in'); displayFinalResult(5)">Galaxy S23</button>
+<button onclick="setDevicePromo('Galaxy A54 - $0/mo with trade-in'); displayFinalResult(0)">Galaxy A54</button>
+</div><div class="question hidden" id="motorolaModels">
+<p>Select a Motorola Device:</p>
+<button onclick="setDevicePromo('Moto Razr 2025 - $15/mo after $200 off'); displayFinalResult(15)">Moto Razr 2025</button>
+</div></body>
 </html>
