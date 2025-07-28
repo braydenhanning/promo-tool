@@ -112,7 +112,7 @@
 </div>
 <div class="result hidden" id="result">
 <span id="offerText"></span>
-<div class="disclaimer>
+<div class="disclaimer">
 <p>First bill will not include the promotion and the customers will be responsible for the full monthly device payment.</p>
 <p>Trade-ins processed via Asurion; credits begin within 2 bill cycles.</p>
 <p>Port-in or Financing a Device is required to qualify for promotional pricing.</p>
@@ -183,6 +183,68 @@ function displayFinalResult(deviceAmount) {
 </script>
 
     
+
+    
+<script>
+function printResult() {
+  const offerText = document.getElementById('offerText').innerText;
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) {
+    alert("Popup blocked! Please allow popups for this website.");
+    return;
+  }
+  printWindow.document.write(`
+    <html>
+    <head>
+      <title>Print Offer</title>
+      <style>
+        @media print {
+          .no-print { display: none; }
+        }
+        body {
+          font-family: sans-serif;
+          padding: 40px;
+          font-size: 18px;
+          line-height: 1.6;
+        }
+        h2 {
+          color: #28a745;
+          text-align: center;
+        }
+        .summary {
+          white-space: pre-wrap;
+          background: #e6f4ea;
+          padding: 20px;
+          border-left: 6px solid #28a745;
+          border-radius: 8px;
+          font-weight: bold;
+          margin-top: 1em;
+        }
+        .logo {
+          display: block;
+          max-width: 200px;
+          margin: 0 auto;
+        }
+      </style>
+    </head>
+    <body>
+      <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png" alt="Optimum Logo" />
+      <h2>Mobile Promo Summary</h2>
+      <div class="summary">${offerText}</div>
+      <script>window.onload = () => { window.print(); }</script>
+    </body>
+    </html>`);
+  printWindow.document.close();
+}
+</script>
+
+</body>
+    </html>`);
+  printWindow.document.close();
+}
+</script>
+
+
 <script>
 function printResult() {
   const offerText = document.getElementById('offerText').innerText;
@@ -278,6 +340,68 @@ function printResult() {
 
 
 
+
+
+
+    
+<script>
+function printResult() {
+  const offerText = document.getElementById('offerText').innerText;
+  const printWindow = window.open('', '_blank');
+  if (!printWindow) {
+    alert("Popup blocked! Please allow popups for this website.");
+    return;
+  }
+  printWindow.document.write(`
+    <html>
+    <head>
+      <title>Print Offer</title>
+      <style>
+        @media print {
+          .no-print { display: none; }
+        }
+        body {
+          font-family: sans-serif;
+          padding: 40px;
+          font-size: 18px;
+          line-height: 1.6;
+        }
+        h2 {
+          color: #28a745;
+          text-align: center;
+        }
+        .summary {
+          white-space: pre-wrap;
+          background: #e6f4ea;
+          padding: 20px;
+          border-left: 6px solid #28a745;
+          border-radius: 8px;
+          font-weight: bold;
+          margin-top: 1em;
+        }
+        .logo {
+          display: block;
+          max-width: 200px;
+          margin: 0 auto;
+        }
+      </style>
+    </head>
+    <body>
+      <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png" alt="Optimum Logo" />
+      <h2>Mobile Promo Summary</h2>
+      <div class="summary">${offerText}</div>
+      <script>window.onload = () => { window.print(); }</script>
+    </body>
+    </html>`);
+  printWindow.document.close();
+}
+</script>
+
+</body>
+    </html>`);
+  printWindow.document.close();
+}
+</script>
 
 
 <script>
