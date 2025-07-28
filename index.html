@@ -64,36 +64,27 @@
   <h1>Combined Promo Flow Tool</h1>
 
   <div id="step1" class="question">
-    <p>Is the customer a new internet subscriber or under 90 days?</p>
-    <button onclick="setServicePromo('HEYITSFREE', 0, 'After 12 months: $45/mo')">Yes</button>
-    <button onclick="goToStep('step2')">No</button>
+    <p>How many mobile lines is the customer adding?</p>
+    <button onclick="setServicePromo('1 Line - Promo: HEYITSFREE', 0, 'After 12 months: $45/mo')">1 Line</button>
+    <button onclick="setServicePromo('2 Lines - Promo: HEYITSFREE', 30, 'After 12 months: $60/mo')">2 Lines</button>
+    <button onclick="setServicePromo('3 Lines - Promo: HEYITSFREE', 60, 'After 12 months: $90/mo')">3 Lines</button>
+    <button onclick="setServicePromo('4 Lines - Promo: HEYITSFREE', 90, 'After 12 months: $120/mo')">4 Lines</button>
   </div>
 
   <div id="step2" class="question hidden">
-    <p>Is there a $10 Deal active?</p>
-    <button onclick="setServicePromo('ONEFOR10', 10, 'After 12 months: $45/mo')">Yes</button>
-    <button onclick="setServicePromo('ONEFOR25', 25, 'After 12 months: $45/mo')">No</button>
+    <p>Would the customer like to add a mobile device?</p>
+    <button onclick="document.getElementById('deviceSection').classList.remove('hidden');">Yes</button>
+    <button onclick="skipDevice()">No</button>
+  </div>
+
+  <div id="deviceSection" class="question hidden">
+    <p>Select the brand of phone:</p>
+    <button onclick="setDevicePromo('Apple iPhone 16: Free with $225+ trade-in (financing only)', 0)">Apple</button>
+    <button onclick="setDevicePromo('Samsung Galaxy S24: $300 off with promo code (financing required)', 499.99)">Samsung</button>
+    <button onclick="setDevicePromo('Moto Razr 2025: $200 off with promo code SAVE200 (port-in required)', 599.99)">Motorola</button>
   </div>
 
   <div id="step3" class="question hidden">
-    <p>Is the customer trading in a device?</p>
-    <button onclick="goToStep('step4trade')">Yes</button>
-    <button onclick="goToStep('step4no')">No</button>
-  </div>
-
-  <div id="step4trade" class="question hidden">
-    <p>What type of device are they purchasing?</p>
-    <button onclick="setDevicePromo('iPhone 16: Free with $225+ trade-in (financing only)', 0)">iPhone</button>
-    <button onclick="setDevicePromo('Moto Razr 2025: $200 off with code SAVE200 (port-in, financing)', 599.99)">Android</button>
-  </div>
-
-  <div id="step4no" class="question hidden">
-    <p>What type of device are they purchasing?</p>
-    <button onclick="setDevicePromo('iPhone 16: Regular price applies', 899.99)">iPhone</button>
-    <button onclick="setDevicePromo('Moto Razr 2025: $200 off with code SAVE200 (port-in, financing)', 599.99)">Android</button>
-  </div>
-
-  <div id="step5" class="question hidden">
     <p>Would the customer like Mobile Device Protection?</p>
     <button onclick="setProtection('MDP+: $18/month', 18)">Yes</button>
     <button onclick="setProtection('No Protection Added', 0)">No</button>
@@ -106,24 +97,24 @@
 </div>
 
 <script>
-  let servicePromo = '', servicePrice = 0, devicePromo = '', devicePrice = 0, protectionText = '', protectionPrice = 0;
-
-  function goToStep(stepId) {
-    document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
-    document.getElementById(stepId).classList.remove('hidden');
-    document.getElementById('result').classList.add('hidden');
-  }
+  let servicePromo = '', servicePrice = 0, devicePromo = 'None', devicePrice = 0, protectionText = 'None', protectionPrice = 0;
 
   function setServicePromo(promo, price, afterText) {
-    servicePromo = `${promo} - $${price}/mo (${afterText})`;
+    servicePromo = `${promo} ($${price}/mo - ${afterText})`;
     servicePrice = price;
-    goToStep('step3');
+    document.getElementById('step2').classList.remove('hidden');
+  }
+
+  function skipDevice() {
+    devicePromo = 'No Device Added';
+    devicePrice = 0;
+    document.getElementById('step3').classList.remove('hidden');
   }
 
   function setDevicePromo(promo, price) {
     devicePromo = promo;
     devicePrice = price;
-    goToStep('step5');
+    document.getElementById('step3').classList.remove('hidden');
   }
 
   function setProtection(text, price) {
@@ -134,7 +125,7 @@
 
   function showFinalResult() {
     const total = servicePrice + protectionPrice;
-    let resultText = `Service Promo: ${servicePromo}\nDevice Deal: ${devicePromo}\nProtection: ${protectionText}`;
+    const resultText = `Service Promo: ${servicePromo}\nDevice: ${devicePromo}\nProtection: ${protectionText}`;
     document.getElementById('offerSummary').innerText = resultText;
     document.getElementById('totalCost').innerText = `Estimated Monthly Total (excl. device financing): $${total.toFixed(2)}`;
     document.getElementById('result').classList.remove('hidden');
