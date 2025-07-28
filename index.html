@@ -112,7 +112,7 @@
 </div>
 <div class="result hidden" id="result">
 <span id="offerText"></span>
-<div class="disclaimer">
+<div style="text-align:center; margin-top:1em;"><button onclick="printResult()" style="background-color:#28a745;">Print This Offer</button></div><div class="disclaimer">
 <p>First bill will not include the promotion and the customers will be responsible for the full monthly device payment.</p>
 <p>Trade-ins processed via Asurion; credits begin within 2 bill cycles.</p>
 <p>Port-in or Financing a Device is required to qualify for promotional pricing.</p>
@@ -221,16 +221,18 @@ function displayFinalResult(deviceAmount) {
 <button onclick="setDevicePromo('Moto Razr 2025 - $15/mo after $200 off'); displayFinalResult(15)">Moto Razr 2025</button>
 </div>
 </div>
+
 <script>
 function printResult() {
-  const resultContent = document.querySelector('.result').innerHTML;
+  const offerText = document.getElementById('offerText').innerText;
   const printWindow = window.open('', '_blank');
-  printWindow.document.write('<html><head><title>Print Offer</title><style>body{font-family:sans-serif;padding:20px;} .disclaimer{margin-top:1em;font-size:0.9em;color:#444;}</style></head><body>' + resultContent + '</body></html>');
+  printWindow.document.write('<html><head><title>Print Offer</title><style>body{font-family:sans-serif;padding:40px;font-size:18px;line-height:1.6;} h2{color:#28a745;}</style></head><body><h2>Mobile Promo Summary</h2><pre>' + offerText + '</pre></body></html>');
   printWindow.document.close();
   printWindow.focus();
   printWindow.print();
 }
 </script>
+
 
 </body>
 </html>
