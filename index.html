@@ -116,6 +116,10 @@
 <p>First bill will not include the promotion and the customers will be responsible for the full monthly device payment.</p>
 <p>Trade-ins processed via Asurion; credits begin within 2 bill cycles.</p>
 <p>Port-in or Financing a Device is required to qualify for promotional pricing.</p>
+
+  <div style="text-align:center; margin-top:1.5em;">
+    <button onclick="restartFlow()">Start Over</button>
+  </div>
 </div>
 
 
@@ -170,11 +174,12 @@ function handleDeviceSelection(choice) {
 
 
 
+
 function setDevicePromo(text) {
   fullSummary += "
 Device Promo: " + text;
   if (text.includes("iPhone 15") && text.includes("Up to $500 off")) {
-    deviceTotal = 25; // Estimated after-discount value, modify as needed
+    deviceTotal = 25; // Estimated after-discount value
   }
 }
 
@@ -182,6 +187,17 @@ Device Promo: " + text;
 
 }
 
+}
+
+
+
+function restartFlow() {
+  serviceTotal = 0;
+  deviceTotal = 0;
+  fullSummary = "";
+  document.getElementById('offerText').innerText = "";
+  goToStep('step1');
+}
 
 function displayFinalResult(deviceAmount) {
   deviceTotal = deviceAmount;
