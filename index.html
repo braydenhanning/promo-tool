@@ -216,5 +216,17 @@ function displayFinalResult(deviceAmount) {
 
 <button onclick="setDevicePromo('Moto Razr 2025 - $15/mo after $200 off'); displayFinalResult(15)">Moto Razr 2025</button>
 </div>
-</div></body>
+</div>
+<script>
+function printResult() {
+  const resultContent = document.querySelector('.result').innerHTML;
+  const printWindow = window.open('', '_blank');
+  printWindow.document.write('<html><head><title>Print Offer</title><style>body{font-family:sans-serif;padding:20px;} .disclaimer{margin-top:1em;font-size:0.9em;color:#444;}</style></head><body>' + resultContent + '</body></html>');
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
+}
+</script>
+
+</body>
 </html>
