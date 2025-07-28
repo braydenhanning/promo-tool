@@ -121,19 +121,14 @@
 <button onclick="goToStep('brandSelect')">Yes</button>
 <button onclick="goToStep('protectionPrompt')">No</button>
 </div><div class="question hidden" id="brandSelect"><p>Which device brand is the customer interested in?</p>
-<button onclick="setDevicePromo('Apple - $0/mo with trade-in'); goToStep('protectionPrompt')">Apple</button>
-<button onclick="setDevicePromo('Samsung - $5/mo with trade-in'); goToStep('protectionPrompt')">Samsung</button>
-<button onclick="setDevicePromo('Motorola - $10/mo with trade-in'); goToStep('protectionPrompt')">Motorola</button>
-</div><div class="question hidden" id="protectionPrompt"><p>Would the customer like Mobile Device Protection?</p>
-<button onclick="setProtection('MDP+ ($18/month)')">Yes</button>
-<button onclick="setProtection('No Protection')">No</button>
+<button onclick="setDevicePromo('Apple - $0/mo with trade-in'); displayFinalResult()">Apple</button>
+<button onclick="setDevicePromo('Samsung - $5/mo with trade-in'); displayFinalResult()">Samsung</button>
+<button onclick="setDevicePromo('Motorola - $10/mo with trade-in'); displayFinalResult()">Motorola</button>
 </div>
 </div>
-
 <script>
 let serviceTotal = 0;
 let deviceTotal = 0;
-let protectionTotal = 0;
 let fullSummary = "";
 
 function goToStep(step) {
@@ -160,10 +155,8 @@ function setDevicePromo(promo) {
   fullSummary += "\nDevice Promo: " + promo;
 }
 
-function setProtection(option) {
-  protectionTotal = option.includes('MDP+') ? 18 : 0;
-  fullSummary += "\nProtection: " + option;
-  const grandTotal = serviceTotal + deviceTotal + protectionTotal;
+function displayFinalResult() {
+  const grandTotal = serviceTotal + deviceTotal;
   fullSummary += "\nEstimated Monthly Total: $" + grandTotal;
   document.getElementById('offerText').innerText = fullSummary;
   goToStep('result');
