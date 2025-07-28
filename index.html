@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mobile Promo Selector</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mobile Promo Selector</title>
+<style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #f8f9fa;
@@ -76,56 +77,59 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Mobile Promo Flow Tool</h1>
-
-    <div id="step1" class="question">
-      <p>Is the customer a new internet subscriber or under 90 days?</p>
-      <button onclick="goToStep('under90')">Yes</button>
-      <button onclick="goToStep('over90')">No</button>
-    </div>
-
-    <div id="under90" class="question hidden">
-      <p>How many mobile lines is the customer adding?</p>
-      <button onclick="showResult('1 line free (After 12 months: $45/mo) - Promo: HEYITSFREE')">1 Line</button>
-      <button onclick="showResult('$30 for 2 lines ($15/line) (After 12 months: $60/mo) - Promo: HEYITSFREE')">2 Lines</button>
-      <button onclick="showResult('$60 for 3 lines ($20/line) (After 12 months: $90/mo) - Promo: HEYITSFREE')">3 Lines</button>
-      <button onclick="showResult('$90 for 4 lines ($22.50/line) (After 12 months: $120/mo) - Promo: HEYITSFREE')">4 Lines</button>
-    </div>
-
-    <div id="over90" class="question hidden">
-      <p>Is there a $10 Deal active?</p>
-      <button onclick="goToStep('boostYes')">Yes</button>
-      <button onclick="goToStep('boostNo')">No</button>
-    </div>
-
-    <div id="boostYes" class="question hidden">
-      <p>How many mobile lines?</p>
-      <button onclick="showResult('$10 for 1 line (After 12 months: $45/mo) - Promo: ONEFOR10')">1 Line</button>
-      <button onclick="showResult('$36.67 for 2 lines (After 12 months: $60/mo) - Promo: ONEFOR10')">2 Lines</button>
-      <button onclick="showResult('$66.67 for 3 lines (After 12 months: $90/mo) - Promo: ONEFOR10')">3 Lines</button>
-      <button onclick="showResult('$96.67 for 4 lines (After 12 months: $120/mo) - Promo: ONEFOR10')">4 Lines</button>
-    </div>
-
-    <div id="boostNo" class="question hidden">
-      <p>How many mobile lines?</p>
-      <button onclick="showResult('$25 for 1 line (After 12 months: $45/mo) - Promo: ONEFOR25')">1 Line</button>
-      <button onclick="showResult('$45 for 2 lines (After 12 months: $60/mo) - Promo: BOGO')">2 Lines</button>
-      <button onclick="showResult('$75 for 3 lines (After 12 months: $90/mo) - Promo: BOGO + Add a Line')">3 Lines</button>
-      <button onclick="showResult('$100 for 4 lines (After 12 months: $120/mo) - Promo: HAPPYFAM')">4 Lines</button>
-    </div>
-
-    <div id="result" class="result hidden">
-      <span id="offerText"></span>
-      <div class="disclaimer">
-        <p>First bill will not include the promotion and the customers will be responsible for the full monthly device payment.</p>
-        <p>Trade-ins processed via Asurion; credits begin within 2 bill cycles.</p>
-        <p>Port-in or Financing a Device is required to qualify for promotional pricing.</p>
-      </div>
-    </div>
-  </div>
-
-  <script>
+<div class="container">
+<h1>Mobile Promo Flow Tool</h1>
+<div class="question" id="step1">
+<p>Is the customer a new internet subscriber or under 90 days?</p>
+<button onclick="goToStep('under90')">Yes</button>
+<button onclick="goToStep('over90')">No</button>
+</div>
+<div class="question hidden" id="under90">
+<p>How many mobile lines is the customer adding?</p>
+<button onclick="showResult('1 line free (After 12 months: $45/mo) - Promo: HEYITSFREE')">1 Line</button>
+<button onclick="showResult('$30 for 2 lines ($15/line) (After 12 months: $60/mo) - Promo: HEYITSFREE')">2 Lines</button>
+<button onclick="showResult('$60 for 3 lines ($20/line) (After 12 months: $90/mo) - Promo: HEYITSFREE')">3 Lines</button>
+<button onclick="showResult('$90 for 4 lines ($22.50/line) (After 12 months: $120/mo) - Promo: HEYITSFREE')">4 Lines</button>
+</div>
+<div class="question hidden" id="over90">
+<p>Is there a $10 Deal active?</p>
+<button onclick="goToStep('boostYes')">Yes</button>
+<button onclick="goToStep('boostNo')">No</button>
+</div>
+<div class="question hidden" id="boostYes">
+<p>How many mobile lines?</p>
+<button onclick="showResult('$10 for 1 line (After 12 months: $45/mo) - Promo: ONEFOR10')">1 Line</button>
+<button onclick="showResult('$36.67 for 2 lines (After 12 months: $60/mo) - Promo: ONEFOR10')">2 Lines</button>
+<button onclick="showResult('$66.67 for 3 lines (After 12 months: $90/mo) - Promo: ONEFOR10')">3 Lines</button>
+<button onclick="showResult('$96.67 for 4 lines (After 12 months: $120/mo) - Promo: ONEFOR10')">4 Lines</button>
+</div>
+<div class="question hidden" id="boostNo">
+<p>How many mobile lines?</p>
+<button onclick="showResult('$25 for 1 line (After 12 months: $45/mo) - Promo: ONEFOR25')">1 Line</button>
+<button onclick="showResult('$45 for 2 lines (After 12 months: $60/mo) - Promo: BOGO')">2 Lines</button>
+<button onclick="showResult('$75 for 3 lines (After 12 months: $90/mo) - Promo: BOGO + Add a Line')">3 Lines</button>
+<button onclick="showResult('$100 for 4 lines (After 12 months: $120/mo) - Promo: HAPPYFAM')">4 Lines</button>
+</div>
+<div class="result hidden" id="result">
+<span id="offerText"></span>
+<div class="disclaimer">
+<p>First bill will not include the promotion and the customers will be responsible for the full monthly device payment.</p>
+<p>Trade-ins processed via Asurion; credits begin within 2 bill cycles.</p>
+<p>Port-in or Financing a Device is required to qualify for promotional pricing.</p>
+</div>
+</div><div class="question hidden" id="devicePrompt"><p>Would the customer like to add a mobile device?</p>
+<button onclick="goToStep('brandSelect')">Yes</button>
+<button onclick="goToStep('protectionPrompt')">No</button>
+</div><div class="question hidden" id="brandSelect"><p>Which device brand is the customer interested in?</p>
+<button onclick="setDevicePromo('Apple - $0/mo with trade-in'); goToStep('protectionPrompt')">Apple</button>
+<button onclick="setDevicePromo('Samsung - $5/mo with trade-in'); goToStep('protectionPrompt')">Samsung</button>
+<button onclick="setDevicePromo('Motorola - $10/mo with trade-in'); goToStep('protectionPrompt')">Motorola</button>
+</div><div class="question hidden" id="protectionPrompt"><p>Would the customer like Mobile Device Protection?</p>
+<button onclick="setProtection('MDP+ ($18/month)')">Yes</button>
+<button onclick="setProtection('No Protection')">No</button>
+</div>
+</div>
+<script>
     function goToStep(step) {
       document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
       document.getElementById(step).classList.remove('hidden');
@@ -137,5 +141,34 @@
       document.getElementById('result').classList.remove('hidden');
     }
   </script>
-</body>
+<script>
+let serviceTotal = 0;
+let deviceTotal = 0;
+let protectionTotal = 0;
+let fullSummary = "";
+
+function showResult(text) {
+  const priceMatch = text.match(/\$\d+/g);
+  serviceTotal = priceMatch ? parseInt(priceMatch[0].replace('$','')) : 0;
+  fullSummary = "Recommended Offer: " + text;
+  document.getElementById('offerText').innerText = fullSummary;
+  document.getElementById('result').classList.remove('hidden');
+  goToStep('devicePrompt');
+}
+
+function setDevicePromo(promo) {
+  if (promo.includes('Apple')) deviceTotal = 0;
+  else if (promo.includes('Samsung')) deviceTotal = 5;
+  else if (promo.includes('Motorola')) deviceTotal = 10;
+  fullSummary += "\nDevice Deal: " + promo;
+}
+
+function setProtection(option) {
+  protectionTotal = option.includes('MDP+') ? 18 : 0;
+  fullSummary += "\nProtection: " + option;
+  const grandTotal = serviceTotal + deviceTotal + protectionTotal;
+  fullSummary += "\nEstimated Monthly Total: $" + grandTotal;
+  document.getElementById('offerText').innerText = fullSummary;
+}
+</script></body>
 </html>
