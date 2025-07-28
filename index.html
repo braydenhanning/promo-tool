@@ -243,10 +243,12 @@ function printResult() {
             padding: 40px;
             font-size: 18px;
             line-height: 1.6;
-          }
-          h2 {
-            color: #28a745;
             text-align: center;
+          }
+          .summary-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2em;
           }
           .summary {
             white-space: pre-wrap;
@@ -255,19 +257,26 @@ function printResult() {
             border-left: 6px solid #28a745;
             border-radius: 8px;
             font-weight: bold;
-            margin-top: 1em;
+            max-width: 600px;
+            text-align: left;
           }
           .logo {
             display: block;
             max-width: 200px;
             margin: 0 auto 20px;
           }
+          h2 {
+            color: #28a745;
+            margin-bottom: 10px;
+          }
         </style>
       </head>
       <body>
         <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png" alt="Optimum Logo" />
         <h2>Mobile Promo Summary</h2>
-        <div class="summary">\${offerText}</div>
+        <div class="summary-container">
+          <div class="summary">\${offerText}</div>
+        </div>
       </body>
     </html>\`);
   printWindow.document.close();
