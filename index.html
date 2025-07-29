@@ -157,9 +157,13 @@ function goToStep(step) {
 }
 
 function showResult(text) {
-  const match = text.match(/\$\d+/g);
-  serviceTotal = match ? parseInt(match[0].replace('$','')) : 0;
   fullSummary = "Recommended Offer: " + text;
+
+  // Only try to extract price before the 'After' part
+  const beforeAfter = text.split('After')[0];
+  const match = beforeAfter.match(/\$([\d]+)/);
+  serviceTotal = match ? parseInt(match[1]) : 0;
+
   goToStep('devicePrompt');
 }
 
