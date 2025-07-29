@@ -179,9 +179,6 @@ function handleDeviceSelection(choice) {
 
 function setDevicePromo(text) {
   fullSummary += "\nDevice Promo: " + text;
-  const match = text.match(/\$([\d.]+)/);
-  deviceTotal = match ? parseFloat(match[1]) : 0;
-  displayFinalResult();
 }
 
 function displayFinalResult(deviceAmount) {
