@@ -81,8 +81,8 @@
 <h1>Mobile Promo Flow Tool</h1>
 <div class="question" id="step1">
 <p>Is the customer a new internet subscriber or under 90 days?</p>
-<button onclick="goToStep('under90')">Yes</button>
-<button onclick="goToStep('over90')">No</button>
+<button onclick="isUnder90Days = true; goToStep('under90')">Yes</button>
+<button onclick="isUnder90Days = false; goToStep('over90')">No</button>
 </div>
 <div class="question hidden" id="under90">
 <p>How many mobile lines is the customer adding?</p>
@@ -141,6 +141,7 @@
 <button onclick="setDevicePromo('iPhone 16 - Free with $225+ trade-in'); displayFinalResult(0)">iPhone 16</button>
 <button onclick="setDevicePromo('Moto Razr 2025 - $15/mo after $200 off'); displayFinalResult(15)">Moto Razr 2025</button>
 </div><script>
+    let isUnder90Days = false;
 let serviceTotal = 0;
 let deviceTotal = 0;
 let fullSummary = "";
@@ -268,6 +269,7 @@ function printResult() {
       <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png" alt="Optimum Logo" />
       <h2>Mobile Promo Summary</h2>
       <div class="summary">${offerText}</div>
+      ${isUnder90Days ? '<p style="margin-top:2em; font-size:14px; color:#555;">*This offer is only valid within 90 days of internet service activation.</p>' : ''}
     </body>
     </html>`);
   printWindow.document.close();
