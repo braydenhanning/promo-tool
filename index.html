@@ -278,9 +278,10 @@ function printResult() {
     </html>
   `);
   printWindow.document.close();
-  printWindow.focus();
+printWindow.focus();
+setTimeout(() => {
   printWindow.print();
-}
+}, 1500); // delay in milliseconds (1500 = 1.5 seconds)
 </script>
 
 </body>
