@@ -140,47 +140,7 @@
 <button onclick="setDevicePromo('iPad (A16) - $10/mo after $200 off'); displayFinalResult(10)">iPad (A16)</button>
 <button onclick="setDevicePromo('iPhone 16 - Free with $225+ trade-in'); displayFinalResult(0)">iPhone 16</button>
 <button onclick="setDevicePromo('Moto Razr 2025 - $15/mo after $200 off'); displayFinalResult(15)">Moto Razr 2025</button>
-</div><script>
-let serviceTotal = 0;
-let deviceTotal = 0;
-let fullSummary = "";
-
-function goToStep(step) {
-  document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
-  const el = document.getElementById(step);
-  if (el) el.classList.remove('hidden');
-  if (step !== 'result') document.getElementById('result').classList.add('hidden');
-}
-
-function showResult(text) {
-  const match = text.match(/\$\d+/g);
-  serviceTotal = match ? parseInt(match[0].replace('$','')) : 0;
-  fullSummary = "Recommended Offer: " + text;
-  goToStep('devicePrompt');
-}
-
-function handleDeviceSelection(choice) {
-  if (choice === 'no') {
-    deviceTotal = 0;
-    fullSummary += "\nDevice Promo: No device added";
-    displayFinalResult(0);
-  } else {
-    goToStep('brandSelect');
-  }
-}
-
-function setDevicePromo(text) {
-  fullSummary += "\nDevice Promo: " + text;
-}
-
-function displayFinalResult(deviceAmount) {
-  deviceTotal = deviceAmount;
-  const total = serviceTotal + deviceTotal;
-  fullSummary += "\nEstimated Monthly Total: $" + total;
-  document.getElementById('offerText').innerText = fullSummary;
-  goToStep('result');
-}
-</script><div class="question hidden" id="appleModels"><p>Select an Apple Device:</p>
+</div><div class="question hidden" id="appleModels"><p>Select an Apple Device:</p>
 <div style="text-align:center; margin-bottom:1.5em;">
 
 <button onclick="setDevicePromo('iPhone 15 - Up to $500 off with trade-in'); displayFinalResult(0)">iPhone 15</button>
@@ -226,11 +186,66 @@ function displayFinalResult(deviceAmount) {
 
 
 
+
+
+
 <script>
+let serviceTotal = 0;
+let deviceTotal = 0;
+let fullSummary = "";
+let isUnder90Days = false;
+
+function goToStep(step) {
+  document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
+  const el = document.getElementById(step);
+  if (el) el.classList.remove('hidden');
+  if (step !== 'result') document.getElementById('result').classList.add('hidden');
+  if (step === 'under90') {
+    isUnder90Days = true;
+  } else if (step === 'over90') {
+    isUnder90Days = false;
+  }
+}
+
+function showResult(text) {
+  const match = text.match(/\$\d+/g);
+  serviceTotal = match ? parseInt(match[0].replace('$','')) : 0;
+  fullSummary = "Recommended Offer: " + text;
+  goToStep('devicePrompt');
+}
+
+function handleDeviceSelection(choice) {
+  if (choice === 'no') {
+    deviceTotal = 0;
+    fullSummary += "\nDevice Promo: No device added";
+    displayFinalResult(0);
+  } else {
+    goToStep('brandSelect');
+  }
+}
+
+function setDevicePromo(text) {
+  fullSummary += "\nDevice Promo: " + text;
+}
+
+function displayFinalResult(deviceAmount) {
+  deviceTotal = deviceAmount;
+  const total = serviceTotal + deviceTotal;
+  fullSummary += "\nEstimated Monthly Total: $" + total;
+  document.getElementById('offerText').innerText = fullSummary;
+  goToStep('result');
+}
+
 function printResult() {
   const offerText = document.getElementById('offerText').innerText;
+  const extraNotice = isUnder90Days
+    ? `<p style="margin-top:20px; font-size:14px; color:#555;">
+         <em>*Offer only valid within 90 days of signing up for new internet service.</em>
+       </p>`
+    : '';
+
   const printWindow = window.open('', '_blank');
-  printWindow.document.write(`
+  printWindow.document.write(\`
     <html>
     <head>
       <title>Print Offer</title>
@@ -267,9 +282,10 @@ function printResult() {
     <body>
       <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png" alt="Optimum Logo" />
       <h2>Mobile Promo Summary</h2>
-      <div class="summary">${offerText}</div>
+      <div class="summary">\${offerText}</div>
+      \${extraNotice}
     </body>
-    </html>`);
+    </html>\`);
   printWindow.document.close();
   printWindow.focus();
   printWindow.print();
