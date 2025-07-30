@@ -344,11 +344,15 @@ function printResult() {
 // existing functions like goToStep, showResult, etc.
 
 function processMultipleDevices() {
+  fullSummary = document.getElementById("offerText").innerText || fullSummary;
+
   const form = document.getElementById("deviceForm");
   const checkboxes = form.querySelectorAll("input[type=checkbox]:checked");
   let deviceSummary = "";
   let totalDeviceCost = 0;
-  let totalDevices = 0;
+  let phoneCount = 0;
+  let iPadCount = 0;
+  let iPadServiceTotal = 0;
 
   checkboxes.forEach(cb => {
     const [label, costStr, promo] = cb.value.split("|");
@@ -356,23 +360,62 @@ function processMultipleDevices() {
     const monthlyCost = parseFloat(costStr);
     const totalCost = qty * monthlyCost;
 
-    totalDevices += qty;
+    if (label.toLowerCase().includes("ipad")) {
+      iPadCount += qty;
+      const iPadServicePrice = (phoneCount > 0) ? 25 : 45;
+      iPadServiceTotal += iPadServicePrice * qty;
+    } else {
+      phoneCount += qty;
+    }
+
     totalDeviceCost += totalCost;
     deviceSummary += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
   });
 
- if (totalDevices > 0 && totalDevices > getMobileLineCount()) {
-  alert(`You selected ${totalDevices} device(s), but only ${getMobileLineCount()} mobile line(s). Each device must have a line.`);
-  return;
+// Update fullSummary with tablet service line logic
+const promoLines = phoneCount;
+let baseMatch = fullSummary.match(/Recommended Offer: (.*?) for (\d+) line/);
+let newServiceSummary = "";
+let baseServiceTotal = 0;
+let promoText = "";
+
+// Determine phone-based service pricing
+if (phoneCount === 0 && iPadCount > 0) {
+  baseServiceTotal = 0;
+  promoText = "No promo code available";
+} else if (phoneCount === 1) {
+  baseServiceTotal = 25;
+  promoText = "ONEFOR25";
+} else if (phoneCount === 2) {
+  baseServiceTotal = 45;
+  promoText = "BOGO";
+} else if (phoneCount === 3) {
+  baseServiceTotal = 75;
+  promoText = "BOGO + Add a Line";
+} else if (phoneCount === 4) {
+  baseServiceTotal = 100;
+  promoText = "HAPPYFAM";
+} else if (phoneCount === 5) {
+  baseServiceTotal = 125;
+  promoText = "No Promo code needed";
+} else {
+  baseServiceTotal = 125 + (phoneCount - 5) * 25;
+  promoText = "No Promo code needed";
 }
 
-if (totalDevices > 5) {
-  const proceed = confirm("Financing is available for up to 5 devices every 90 days. For purchases exceeding this limit, the Pay In Full option remains available.\n\nDo you wish to continue?");
-  if (!proceed) return;
+// Total service = phone promo price + iPad service total
+serviceTotal = baseServiceTotal + iPadServiceTotal;
+
+if (phoneCount === 0 && iPadCount > 0) {
+  newServiceSummary = `Recommended Offer: $${serviceTotal} for 0 lines – Promo: ${promoText}`;
+} else if (phoneCount > 0 && iPadCount > 0) {
+  newServiceSummary = `Recommended Offer: $${serviceTotal} total – Includes phone promo (${promoText}) + $${iPadServiceTotal} for iPad line(s)`;
+} else {
+  newServiceSummary = `Recommended Offer: $${serviceTotal} for ${phoneCount} line(s) – Promo: ${promoText}`;
 }
 
-  fullSummary += "\nDevice Promo(s):" + deviceSummary;
-  displayFinalResult(totalDeviceCost);
+fullSummary = newServiceSummary + "\nDevice Promo(s):" + deviceSummary;
+displayFinalResult(totalDeviceCost);
 }
 function getMobileLineCount() {
   // Extract number of lines from summary
