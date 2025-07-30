@@ -160,6 +160,7 @@
   <p>Select Mobile Devices (check all that apply and choose quantity):</p>
   <form id="deviceForm">
     <!-- Apple -->
+<!-- Phones -->
 <label><input type="checkbox" name="device" value="iPhone 15|0|Up to $500 off with trade-in"> iPhone 15</label>
 <select name="qty_iPhone 15"><option>1</option><option>2</option><option>3</option></select><br>
 
@@ -172,19 +173,22 @@
 <label><input type="checkbox" name="device" value="iPhone 16|0|Free with $225+ trade-in"> iPhone 16</label>
 <select name="qty_iPhone 16"><option>1</option><option>2</option><option>3</option></select><br>
 
-<label><input type="checkbox" name="device" value="iPad (A16)|8.30|$200 off"> iPad (A16)</label>
-<select name="qty_iPad (A16)"><option>1</option><option>2</option><option>3</option></select><br>
-
-<!-- Samsung -->
-<label><input type="checkbox" name="device" value="Galaxy S25|5|$5/mo with trade-in"> Galaxy S25</label>
+<label><input type="checkbox" name="device" value="Galaxy S25|0|$0/mo with trade-in"> Galaxy S25</label>
 <select name="qty_Galaxy S25"><option>1</option><option>2</option><option>3</option></select><br>
 
 <label><input type="checkbox" name="device" value="Galaxy A54|0|$0/mo with trade-in"> Galaxy A54</label>
 <select name="qty_Galaxy A54"><option>1</option><option>2</option><option>3</option></select><br>
 
-<!-- Motorola -->
 <label><input type="checkbox" name="device" value="Moto Razr 2025|15|$15/mo after $200 off"> Moto Razr 2025</label>
 <select name="qty_Moto Razr 2025"><option>1</option><option>2</option><option>3</option></select><br>
+
+<!-- Add-On Section -->
+<hr style="margin: 1.5em 0;">
+<strong style="font-size: 1.1em;">Choose an Add-On Device</strong><br><br>
+
+<label><input type="checkbox" name="device" value="iPad (A16)|8.30|$200 off"> iPad (A16)</label>
+<select name="qty_iPad (A16)"><option>1</option><option>2</option><option>3</option></select><br>
+
   </form>
   <button onclick="processMultipleDevices()">Continue</button>
 </div><script>
