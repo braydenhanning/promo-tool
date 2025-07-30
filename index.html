@@ -156,16 +156,36 @@
 </div>
 </div>
 <div class="question hidden" id="modelSelect">
-<p>Select a Mobile Device:</p>
-<button onclick="setDevicePromo('iPhone 15 - Up to $500 off with trade-in'); displayFinalResult(0)">iPhone 15</button>
-<button onclick="setDevicePromo('iPhone 15 Plus - Up to $500 off with trade-in'); displayFinalResult(0)">iPhone 15 Plus</button>
-<button onclick="setDevicePromo('iPhone 16e - $0/mo with $100+ trade-in'); displayFinalResult(0)">iPhone 16e</button>
-<button onclick="setDevicePromo('iPad (A16) - $8.30/mo after $200 off'); serviceTotal = 25; displayFinalResult(8.30)">iPad (A16)</button>
-<button onclick="setDevicePromo('iPhone 16 - Free with $225+ trade-in'); displayFinalResult(0)">iPhone 16</button>
-<button onclick="setDevicePromo('iPhone 16 Plus - $11.91/mo after $250 off'); displayFinalResult(11.91)">iPhone 16 Plus</button>
-<button onclick="setDevicePromo('iPhone 16 Pro - $13.86/mo after $300 off'); displayFinalResult(13.86)">iPhone 16 Pro</button>
-<button onclick="setDevicePromo('iPhone 16 Pro Max - $19.41/mo after $300 off'); displayFinalResult(19.41)">iPhone 16 Pro Max</button>
-<button onclick="setDevicePromo('Moto Razr 2025 - $15/mo after $200 off'); displayFinalResult(15)">Moto Razr 2025</button>
+  <p>Select Mobile Devices (check all that apply and choose quantity):</p>
+  <form id="deviceForm">
+    <!-- Apple -->
+<label><input type="checkbox" name="device" value="iPhone 15|0|Up to $500 off with trade-in"> iPhone 15</label>
+<select name="qty_iPhone 15"><option>1</option><option>2</option><option>3</option></select><br>
+
+<label><input type="checkbox" name="device" value="iPhone 15 Plus|0|Up to $500 off with trade-in"> iPhone 15 Plus</label>
+<select name="qty_iPhone 15 Plus"><option>1</option><option>2</option><option>3</option></select><br>
+
+<label><input type="checkbox" name="device" value="iPhone 16e|0|$0/mo with $100+ trade-in"> iPhone 16e</label>
+<select name="qty_iPhone 16e"><option>1</option><option>2</option><option>3</option></select><br>
+
+<label><input type="checkbox" name="device" value="iPhone 16|0|Free with $225+ trade-in"> iPhone 16</label>
+<select name="qty_iPhone 16"><option>1</option><option>2</option><option>3</option></select><br>
+
+<label><input type="checkbox" name="device" value="iPad (A16)|8.30|$200 off"> iPad (A16)</label>
+<select name="qty_iPad (A16)"><option>1</option><option>2</option><option>3</option></select><br>
+
+<!-- Samsung -->
+<label><input type="checkbox" name="device" value="Galaxy S25|5|$5/mo with trade-in"> Galaxy S23</label>
+<select name="qty_Galaxy S25"><option>1</option><option>2</option><option>3</option></select><br>
+
+<label><input type="checkbox" name="device" value="Galaxy A54|0|$0/mo with trade-in"> Galaxy A54</label>
+<select name="qty_Galaxy A54"><option>1</option><option>2</option><option>3</option></select><br>
+
+<!-- Motorola -->
+<label><input type="checkbox" name="device" value="Moto Razr 2025|15|$15/mo after $200 off"> Moto Razr 2025</label>
+<select name="qty_Moto Razr 2025"><option>1</option><option>2</option><option>3</option></select><br>
+  </form>
+  <button onclick="processMultipleDevices()">Continue</button>
 </div><script>
     let isUnder90Days = false;
 let serviceTotal = 0;
@@ -196,7 +216,7 @@ function handleDeviceSelection(choice) {
     fullSummary += "\nDevice Promo: No device added";
     displayFinalResult(0);
   } else {
-    goToStep('brandSelect');
+    goToStep('modelSelect');
   }
 }
 
@@ -314,6 +334,39 @@ function printResult() {
   setTimeout(() => {
     printWindow.print();
   }, 250); // 0.5 second delay
+}
+// existing functions like goToStep, showResult, etc.
+
+function processMultipleDevices() {
+  const form = document.getElementById("deviceForm");
+  const checkboxes = form.querySelectorAll("input[type=checkbox]:checked");
+  let deviceSummary = "";
+  let totalDeviceCost = 0;
+  let totalDevices = 0;
+
+  checkboxes.forEach(cb => {
+    const [label, costStr, promo] = cb.value.split("|");
+    const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
+    const monthlyCost = parseFloat(costStr);
+    const totalCost = qty * monthlyCost;
+
+    totalDevices += qty;
+    totalDeviceCost += totalCost;
+    deviceSummary += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
+  });
+
+  if (totalDevices > 0 && totalDevices > getMobileLineCount()) {
+    alert(`You selected ${totalDevices} device(s), but only ${getMobileLineCount()} mobile line(s). Each device must have a line.`);
+    return;
+  }
+
+  fullSummary += "\nDevice Promo(s):" + deviceSummary;
+  displayFinalResult(totalDeviceCost);
+}
+function getMobileLineCount() {
+  // Extract number of lines from summary
+  const match = fullSummary.match(/(\d+)\s+line/);
+  return match ? parseInt(match[1]) : 0;
 }
 </script>
 
