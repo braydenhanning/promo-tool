@@ -86,17 +86,17 @@
 </div>
 <div class="question hidden" id="under90">
 <p>Now, Does the customer have 500mbps or higher?</p>
-<button onclick="showResult('500higher')">Yes</button>
-<button onclick="showResult('300lower')">No</button>
+<button onclick="showResult('speed500check')">Yes</button>
+<button onclick="showResult('speed300check')">No</button>
 </div>
-    <div class="question hidden" id="500higher">
+    <div class="question hidden" id="speed500check">
 <p>How many mobile lines is the customer adding?</p>
 <button onclick="showResult('1 line free (After 12 months: $45/mo) - Promo: HEYITSFREE')">1 Line</button>
 <button onclick="showResult('$30 for 2 lines ($15/line) (After 12 months: $60/mo) - Promo: HEYITSFREE')">2 Lines</button>
 <button onclick="showResult('$60 for 3 lines ($20/line) (After 12 months: $90/mo) - Promo: HEYITSFREE')">3 Lines</button>
 <button onclick="showResult('$90 for 4 lines ($22.50/line) (After 12 months: $120/mo) - Promo: HEYITSFREE')">4 Lines</button>
 </div>
-<div class="question hidden" id="300lower">
+<div class="question hidden" id="speed300check">
 <p>Is there a $10 Deal active?</p>
 <button onclick="goToStep('boostYes')">Yes</button>
 <button onclick="goToStep('boostNo')">No</button>
