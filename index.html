@@ -368,6 +368,19 @@ function getMobileLineCount() {
   const match = fullSummary.match(/(\d+)\s+line/);
   return match ? parseInt(match[1]) : 0;
 }
+
+window.onload = function () {
+  const form = document.getElementById("deviceForm");
+  if (form) {
+    const checkboxes = form.querySelectorAll("input[type=checkbox]");
+    const selects = form.querySelectorAll("select");
+
+    checkboxes.forEach(cb => cb.checked = false);
+    selects.forEach(select => select.selectedIndex = 0);
+  }
+};
+const radios = document.querySelectorAll("input[type=radio]");
+radios.forEach(r => r.checked = false);
 </script>
 
 </body>
