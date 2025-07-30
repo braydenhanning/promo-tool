@@ -361,10 +361,15 @@ function processMultipleDevices() {
     deviceSummary += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
   });
 
-  if (totalDevices > 0 && totalDevices > getMobileLineCount()) {
-    alert(`You selected ${totalDevices} device(s), but only ${getMobileLineCount()} mobile line(s). Each device must have a line.`);
-    return;
-  }
+ if (totalDevices > 0 && totalDevices > getMobileLineCount()) {
+  alert(`You selected ${totalDevices} device(s), but only ${getMobileLineCount()} mobile line(s). Each device must have a line.`);
+  return;
+}
+
+if (totalDevices > 5) {
+  const proceed = confirm("Financing is available for up to 5 devices every 90 days. For purchases exceeding this limit, the Pay In Full option remains available.\n\nDo you wish to continue?");
+  if (!proceed) return;
+}
 
   fullSummary += "\nDevice Promo(s):" + deviceSummary;
   displayFinalResult(totalDeviceCost);
