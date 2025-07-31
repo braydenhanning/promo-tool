@@ -84,23 +84,23 @@
 <button onclick="isUnder90Days = true; goToStep('internetSpeedCheck')">Yes</button>
 <button onclick="isUnder90Days = false; goToStep('over90')">No</button>
 </div>
-    <div class="question hidden" id="internetSpeedCheck">
-        <p>Now, does the customer have 500 mbps or higher?</p>
-        <button onclick="goToStep('under90highspeed')">Yes</button>
-        <button onclick="goToStep('over90')">No</button>
-    </div>
+<div class="question hidden" id="internetSpeedCheck">
+<p>Now, does the customer have 500 mbps or higher?</p>
+<button onclick="goToStep('under90highspeed')">Yes</button>
+<button onclick="goToStep('over90')">No</button>
+</div>
 <div class="question hidden" id="under90highspeed">
 <p>How many mobile lines is the customer adding?</p>
 <button onclick="showResult('1 line free (After 12 months: $45/mo) - Promo: HEYITSFREE')">1 Line</button>
 <button onclick="showResult('$30 for 2 lines ($15/line) (After 12 months: $60/mo) - Promo: HEYITSFREE')">2 Lines</button>
 <button onclick="showResult('$60 for 3 lines ($20/line) (After 12 months: $90/mo) - Promo: HEYITSFREE')">3 Lines</button>
 <button onclick="showResult('$90 for 4 lines ($22.50/line) (After 12 months: $120/mo) - Promo: HEYITSFREE')">4 Lines</button>
-  <button onclick="showResult('$115 for 5 lines ($23/line) (After 12 months: $125/mo) - Promo: HEYITSFREE')">5 Lines</button>
-  <button onclick="showResult('$138 for 6 lines ($23/line) (After 12 months: $150/mo) - Promo: HEYITSFREE')">6 Lines</button>
-  <button onclick="showResult('$161 for 7 lines ($23/line) (After 12 months: $175/mo) - Promo: HEYITSFREE')">7 Lines</button>
-  <button onclick="showResult('$184 for 8 lines ($23/line) (After 12 months: $200/mo) - Promo: HEYITSFREE')">8 Lines</button>
-  <button onclick="showResult('$207 for 9 lines ($23/line) (After 12 months: $225/mo) - Promo: HEYITSFREE')">9 Lines</button>
-  <button onclick="showResult('$230 for 10 lines ($23/line) (After 12 months: $250/mo) - Promo: HEYITSFREE')">10 Lines</button>
+<button onclick="showResult('$115 for 5 lines ($23/line) (After 12 months: $125/mo) - Promo: HEYITSFREE')">5 Lines</button>
+<button onclick="showResult('$138 for 6 lines ($23/line) (After 12 months: $150/mo) - Promo: HEYITSFREE')">6 Lines</button>
+<button onclick="showResult('$161 for 7 lines ($23/line) (After 12 months: $175/mo) - Promo: HEYITSFREE')">7 Lines</button>
+<button onclick="showResult('$184 for 8 lines ($23/line) (After 12 months: $200/mo) - Promo: HEYITSFREE')">8 Lines</button>
+<button onclick="showResult('$207 for 9 lines ($23/line) (After 12 months: $225/mo) - Promo: HEYITSFREE')">9 Lines</button>
+<button onclick="showResult('$230 for 10 lines ($23/line) (After 12 months: $250/mo) - Promo: HEYITSFREE')">10 Lines</button>
 </div>
 <div class="question hidden" id="over90">
 <p>Is there a $10 Deal active?</p>
@@ -135,23 +135,21 @@
 </div>
 <div class="result hidden" id="result">
 <span id="offerText"></span>
-<div style="text-align:center; margin-top:1em;"><button onclick="printResult()" style="background-color:#28a745;">Print This Offer</button></div><div class="disclaimer">
+<div style="text-align:center; margin-top:1em;"></div><div class="disclaimer">
 <p>First bill will not include the promotion and the customers will be responsible for the full monthly device payment.</p>
 <p>Trade-ins processed via Asurion; credits begin within 2 bill cycles.</p>
 <p>Port-in or Financing a Device is required to qualify for promotional pricing.</p>
 <p>Prices before taxes and fees.</p>
 </div>
 <div style="text-align:center; margin-top:1em;">
-  <button onclick="printResult()" style="background-color:#28a745;">Print Offer as Receipt</button>
-    <button onclick="printFullPage()" style="background-color:#6c757d; margin-top: 0.5em;">Print Full Page Summary</button>
+<button onclick="printResult()" style="background-color:#28a745;">Print Offer as Receipt</button>
+<button onclick="printFullPage()" style="background-color:#6c757d; margin-top: 0.5em;">Print Full Page Summary</button>
 <a href="https://braydenhanning.github.io/receiptinstructions/" target="_blank">
-  <button style="background-color:#ffc107; color:#000; font-size: 0.9em; width: 100%;">
+<button style="background-color:#ffc107; color:#000; font-size: 0.9em; width: 100%;">
     Help, my receipt is 50 miles long!
   </button>
 </a>
-
 </div>
-
 </div><div class="question hidden" id="devicePrompt">
 <p>Would the customer like to add a mobile device?</p>
 <button onclick="handleDeviceSelection('no')">No</button>
@@ -164,40 +162,31 @@
 </div>
 </div>
 <div class="question hidden" id="modelSelect">
-  <p>Select Mobile Devices (check all that apply and choose quantity):</p>
-  <form id="deviceForm">
-    <!-- Apple -->
+<p>Select Mobile Devices (check all that apply and choose quantity):</p>
+<form id="deviceForm">
+<!-- Apple -->
 <!-- Phones -->
-<label><input type="checkbox" name="device" value="iPhone 15|6.37|Up to $500 off with trade-in"> iPhone 15</label>
-<select name="qty_iPhone 15"><option>1</option><option>2</option><option>3</option></select><br>
-
-<label><input type="checkbox" name="device" value="iPhone 15 Plus|9.14|Up to $500 off with trade-in"> iPhone 15 Plus</label>
-<select name="qty_iPhone 15 Plus"><option>1</option><option>2</option><option>3</option></select><br>
-
-<label><input type="checkbox" name="device" value="iPhone 16e|0|$0/mo with $100+ trade-in"> iPhone 16e</label>
-<select name="qty_iPhone 16e"><option>1</option><option>2</option><option>3</option></select><br>
-
-<label><input type="checkbox" name="device" value="iPhone 16|0|Free with $225+ trade-in"> iPhone 16</label>
-<select name="qty_iPhone 16"><option>1</option><option>2</option><option>3</option></select><br>
-
-<label><input type="checkbox" name="device" value="Galaxy S25|0|$0/mo with trade-in"> Galaxy S25</label>
-<select name="qty_Galaxy S25"><option>1</option><option>2</option><option>3</option></select><br>
-
-<label><input type="checkbox" name="device" value="Galaxy A54|0|$0/mo with trade-in"> Galaxy A54</label>
-<select name="qty_Galaxy A54"><option>1</option><option>2</option><option>3</option></select><br>
-
-<label><input type="checkbox" name="device" value="Moto Razr 2025|15|$15/mo after $200 off"> Moto Razr 2025</label>
-<select name="qty_Moto Razr 2025"><option>1</option><option>2</option><option>3</option></select><br>
-
+<label><input name="device" type="checkbox" value="iPhone 15|6.37|Up to $500 off with trade-in"/> iPhone 15</label>
+<select name="qty_iPhone 15"><option>1</option><option>2</option><option>3</option></select><br/>
+<label><input name="device" type="checkbox" value="iPhone 15 Plus|9.14|Up to $500 off with trade-in"/> iPhone 15 Plus</label>
+<select name="qty_iPhone 15 Plus"><option>1</option><option>2</option><option>3</option></select><br/>
+<label><input name="device" type="checkbox" value="iPhone 16e|0|$0/mo with $100+ trade-in"/> iPhone 16e</label>
+<select name="qty_iPhone 16e"><option>1</option><option>2</option><option>3</option></select><br/>
+<label><input name="device" type="checkbox" value="iPhone 16|0|Free with $225+ trade-in"/> iPhone 16</label>
+<select name="qty_iPhone 16"><option>1</option><option>2</option><option>3</option></select><br/>
+<label><input name="device" type="checkbox" value="Galaxy S25|0|$0/mo with trade-in"/> Galaxy S25</label>
+<select name="qty_Galaxy S25"><option>1</option><option>2</option><option>3</option></select><br/>
+<label><input name="device" type="checkbox" value="Galaxy A54|0|$0/mo with trade-in"/> Galaxy A54</label>
+<select name="qty_Galaxy A54"><option>1</option><option>2</option><option>3</option></select><br/>
+<label><input name="device" type="checkbox" value="Moto Razr 2025|15|$15/mo after $200 off"/> Moto Razr 2025</label>
+<select name="qty_Moto Razr 2025"><option>1</option><option>2</option><option>3</option></select><br/>
 <!-- Add-On Section -->
-<hr style="margin: 1.5em 0;">
-<strong style="font-size: 1.1em;">Choose an Add-On Device</strong><br><br>
-
-<label><input type="checkbox" name="device" value="iPad (A16)|8.30|$200 off"> iPad (A16)</label>
-<select name="qty_iPad (A16)"><option>1</option><option>2</option><option>3</option></select><br>
-
-  </form>
-  <button onclick="processMultipleDevices()">Continue</button>
+<hr style="margin: 1.5em 0;"/>
+<strong style="font-size: 1.1em;">Choose an Add-On Device</strong><br/><br/>
+<label><input name="device" type="checkbox" value="iPad (A16)|8.30|$200 off"/> iPad (A16)</label>
+<select name="qty_iPad (A16)"><option>1</option><option>2</option><option>3</option></select><br/>
+</form>
+<button onclick="processMultipleDevices()">Continue</button>
 </div><script>
     let isUnder90Days = false;
 let serviceTotal = 0;
@@ -278,50 +267,32 @@ function displayFinalResult(deviceAmount) {
 }
 </script><div class="question hidden" id="appleModels"><p>Select an Apple Device:</p>
 <div style="text-align:center; margin-bottom:1.5em;">
-
 <button onclick="setDevicePromo('iPhone 15 - Up to $500 off with trade-in'); displayFinalResult(0)">iPhone 15</button>
 </div>
-
 <div style="text-align:center; margin-bottom:1.5em;">
-
 <button onclick="setDevicePromo('iPhone 15 Plus - Up to $500 off with trade-in'); displayFinalResult(0)">iPhone 15 Plus</button>
 </div>
-
 <div style="text-align:center; margin-bottom:1.5em;">
-
 <button onclick="setDevicePromo('iPhone 16e - $0/mo with $100+ trade-in'); displayFinalResult(0)">iPhone 16e</button>
 </div>
-
 <div style="text-align:center; margin-bottom:1.5em;">
-
 <button onclick="setDevicePromo('iPhone 16 - Free with $225+ trade-in'); displayFinalResult(0)">iPhone 16</button>
 </div>
-
 <div style="text-align:center; margin-bottom:1.5em;">
-
 <button onclick="setDevicePromo('iPad (A16) - $10/mo after $200 off'); displayFinalResult(10)">iPad (A16)</button>
 </div>
 </div><div class="question hidden" id="samsungModels"><p>Select a Samsung Device:</p>
 <div style="text-align:center; margin-bottom:1.5em;">
-
 <button onclick="setDevicePromo('Galaxy S23 - $5/mo with trade-in'); displayFinalResult(5)">Galaxy S23</button>
 </div>
-
 <div style="text-align:center; margin-bottom:1.5em;">
-
 <button onclick="setDevicePromo('Galaxy A54 - $0/mo with trade-in'); displayFinalResult(0)">Galaxy A54</button>
 </div>
 </div><div class="question hidden" id="motorolaModels"><p>Select a Motorola Device:</p>
 <div style="text-align:center; margin-bottom:1.5em;">
-
 <button onclick="setDevicePromo('Moto Razr 2025 - $15/mo after $200 off'); displayFinalResult(15)">Moto Razr 2025</button>
 </div>
 </div>
-
-
-
-
-
 <script>
 function printResult() {
   const offerText = document.getElementById('offerText').innerText;
@@ -518,6 +489,5 @@ window.onload = function () {
 const radios = document.querySelectorAll("input[type=radio]");
 radios.forEach(r => r.checked = false);
 </script>
-
 </body>
 </html>
