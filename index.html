@@ -413,47 +413,31 @@ function processMultipleDevices() {
   let deviceSummary = "";
   let totalDeviceCost = 0;
   let totalDevices = 0;
-  let ipadQty = 0;
-  let nonIpadDevices = 0;
+  let hasPhone = false;
+  let hasIpad = false;
 
-serviceTotal = 0;
+  serviceTotal = 0;
 
-checkboxes.forEach(cb => {
-  const [label, costStr, promo] = cb.value.split("|");
-  const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
-  const monthlyCost = parseFloat(costStr);
-
-  const isIpad = label.includes("iPad");
-
-  // Accumulate iPad service pricing
-  if (isIpad) {
-    const serviceCost = (nonIpadDevices > 0) ? 25 : 45;
-    serviceTotal += qty * serviceCost;
-  }
-
-  const totalCost = qty * monthlyCost;
-  totalDeviceCost += totalCost;
-
-  const lineLabel = isIpad ? `${label}` : label;
-  deviceSummary += `\n${qty}x ${lineLabel} - $${monthlyCost}/mo each (${promo})`;
-});
-
-  // Now loop again for summary (after determining if iPad should be $25 or $45)
   checkboxes.forEach(cb => {
     const [label, costStr, promo] = cb.value.split("|");
     const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
-    let monthlyCost = parseFloat(costStr);
+    const monthlyCost = parseFloat(costStr);
 
-   if (label.includes("iPad")) {
-  // Always use the device's base price for display
-  monthlyCost = parseFloat(costStr); // e.g., $8.30
-  const serviceCost = (getMobileLineCount() > 1) ? 25 : 45;
-}
+    const isIpad = label.includes("iPad");
+    const isPhone = !isIpad;
 
-    const totalCost = qty * monthlyCost;
-    totalDeviceCost += totalCost;
- const lineLabel = label.includes("iPad") ? `${label} (Service Line)` : label;
-deviceSummary += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
+    if (isIpad) hasIpad = true;
+    if (isPhone) hasPhone = true;
+
+    // Adjust iPad service pricing
+    if (isIpad) {
+      const serviceCost = hasPhone ? 25 : 45;
+      serviceTotal += qty * serviceCost;
+    }
+
+    totalDeviceCost += qty * monthlyCost;
+    deviceSummary += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
+    totalDevices += qty;
   });
 
   if (totalDevices > 0 && totalDevices > getMobileLineCount()) {
