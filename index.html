@@ -192,6 +192,8 @@
 let serviceTotal = 0;
 let deviceTotal = 0;
 let fullSummary = "";
+let selectedServiceCost = 0; // Stores the original mobile plan amount
+
 
 function goToStep(step) {
   document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
@@ -202,48 +204,41 @@ function goToStep(step) {
 
 function showResult(text) {
   const beforeAfter = text.split('After')[0];
-  const match = beforeAfter.match(/\$([\d]+)/);
-  const serviceLines = match ? parseInt(match[1]) : 0;
+  const match = beforeAfter.match(/\$([\d.]+)/); // Handles decimals like 36.67
+  selectedServiceCost = match ? parseFloat(match[1]) : 0;
+  const serviceLines = getMobileLineCount();
 
   const form = document.getElementById("deviceForm");
   const checkboxes = form ? form.querySelectorAll("input[type=checkbox]:checked") : [];
-  let hasOnlyIpad = false;
   let hasIpad = false;
   let hasPhone = false;
+  let deviceSummary = "";
+  totalDeviceCost = 0;
 
- checkboxes.forEach(cb => {
-  const [label, costStr, promo] = cb.value.split("|");
-  const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
-  let monthlyCost = parseFloat(costStr);
-  const isIpad = label.toLowerCase().includes("ipad");
+  checkboxes.forEach(cb => {
+    const [label, costStr, promo] = cb.value.split("|");
+    const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
+    let monthlyCost = parseFloat(costStr);
+    const isIpad = label.toLowerCase().includes("ipad");
 
-  if (isIpad) {
-    // Display the device's monthly cost
-    monthlyCost = parseFloat(costStr);
+    if (isIpad) hasIpad = true;
+    else hasPhone = true;
 
-    // Adjust service total: $45 for single iPad line, $25 if there's another mobile line
-    const serviceCost = (getMobileLineCount() > 1) ? 25 : 45;
-    serviceTotal = getMobileLineCount() * serviceCost;
-  }
+    totalDeviceCost += qty * monthlyCost;
+    deviceSummary += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
+  });
 
-  const totalCost = qty * monthlyCost;
-  totalDeviceCost += totalCost;
-
-  // Only show device cost in summary, not service line pricing
-  deviceSummary += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
-});
-
-  // If it's only iPad(s), adjust the offer text and strip promo
   if ((serviceLines === 1 && hasIpad && !hasPhone) || (hasIpad && !hasPhone)) {
     fullSummary = `Recommended Offer: $${serviceLines * 45} for ${serviceLines} line${serviceLines > 1 ? 's' : ''} – Promo: No promo code available`;
     serviceTotal = serviceLines * 45;
   } else {
     fullSummary = "Recommended Offer: " + text;
-    serviceTotal = match ? parseInt(match[1]) : 0;
+    serviceTotal = selectedServiceCost;
   }
 
   goToStep('devicePrompt');
 }
+
 function handleDeviceSelection(choice) {
   if (choice === 'no') {
     deviceTotal = 0;
@@ -416,7 +411,7 @@ function processMultipleDevices() {
   let hasPhone = false;
   let hasIpad = false;
 
-  serviceTotal = 0;
+serviceTotal = selectedServiceCost;
 
   checkboxes.forEach(cb => {
     const [label, costStr, promo] = cb.value.split("|");
@@ -430,10 +425,10 @@ function processMultipleDevices() {
     if (isPhone) hasPhone = true;
 
     // Adjust iPad service pricing
-    if (isIpad) {
-      const serviceCost = hasPhone ? 25 : 45;
-      serviceTotal += qty * serviceCost;
-    }
+if (isIpad && !hasPhone) {
+  const extraService = qty * 45;
+  serviceTotal += extraService;
+}
 
     totalDeviceCost += qty * monthlyCost;
     deviceSummary += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
