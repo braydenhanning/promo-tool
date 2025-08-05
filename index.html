@@ -77,17 +77,45 @@
   </style>
 </head>
 <body>
+<button onclick="restartTool()" style="
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 0.9em;
+  text-decoration: underline;
+  cursor: pointer;
+  z-index: 9999;
+  margin: 0;
+  padding: 0;
+">Restart</button>
+
 <div class="container"><img alt="Optimum Logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png" style="display:block; margin: 0 auto 1em; max-width: 200px;"/>
 <h1>Mobile Promo Flow Tool</h1>
 <div class="question" id="step1">
-<p>Is the customer a new internet subscriber or under 90 days?</p>
-<button onclick="isUnder90Days = true; goToStep('internetSpeedCheck')">Yes</button>
-<button onclick="isUnder90Days = false; goToStep('over90')">No</button>
+  <p>Is the customer a new internet subscriber or under 90 days?</p>
+<button onclick="isUnder90Days = true; isSwitchAndSaveEligible = true; fullSummary += '✅ Eligible for our Switch & Save program!\nUp to $2,000 back for paying off phones with other carriers.\n'; goToStep('internetSpeedCheck')">Yes</button>
+  <button onclick="isUnder90Days = false; goToStep('internetCheck')">No</button>
 </div>
+
+<div class="question hidden" id="internetCheck">
+  <p>Does the customer currently have internet service?</p>
+  <button onclick="fullSummary += '✅ Eligible for our Switch & Save program!\nUp to $2,000 back for paying off phones with other carriers.\n'; isSwitchAndSaveEligible = true; goToStep('hasInternet')">Yes</button>
+  <button onclick="fullSummary += '⚠️ Customer does not have Optimum internet.\n'; isSwitchAndSaveEligible = false; goToStep('hasInternet')">No</button>
+</div>
+
+
+<div class="question hidden" id="noInternet">
+  <p>Promo not available. Customer must have Optimum internet.</p>
+  <button onclick="goToStep('result'); fullSummary='This promo requires an active Optimum internet subscription.'; document.getElementById('offerText').innerText = fullSummary;">Continue</button>
+</div>
+
 <div class="question hidden" id="internetSpeedCheck">
-<p>Now, does the customer have 500 mbps or higher?</p>
-<button onclick="goToStep('under90highspeed')">Yes</button>
-<button onclick="goToStep('over90')">No</button>
+  <p>Now, does the customer have 500 mbps or higher?</p>
+  <button onclick="goToStep('under90highspeed')">Yes</button>
+  <button onclick="goToStep('hasInternet')">No</button>
 </div>
 <div class="question hidden" id="under90highspeed">
 <p>How many mobile lines is the customer adding?</p>
@@ -102,7 +130,7 @@
 <button onclick="showResult('$207 for 9 lines ($23/line) (After 12 months: $225/mo) - Promo: HEYITSFREE')">9 Lines</button>
 <button onclick="showResult('$230 for 10 lines ($23/line) (After 12 months: $250/mo) - Promo: HEYITSFREE')">10 Lines</button>
 </div>
-<div class="question hidden" id="over90">
+<div class="question hidden" id="hasInternet">
 <p>Is there a $10 Deal active?</p>
 <button onclick="goToStep('boostYes')">Yes</button>
 <button onclick="goToStep('boostNo')">No</button>
@@ -133,6 +161,13 @@
 <button onclick="showResult('$225 for 9 lines - Promo: No Promo code needed')">9 Lines</button>
 <button onclick="showResult('$250 for 10 lines - Promo: No Promo code needed')">10 Lines</button>
 </div>
+
+<div class="question hidden" id="stillFinancingOther">
+  <p>Is the customer still financing a phone with another carrier?</p>
+  <button onclick="isFinancingElsewhere = true; displayFinalResult(deviceTotal)">Yes</button>
+  <button onclick="isFinancingElsewhere = false; displayFinalResult(deviceTotal)">No</button>
+</div>
+
 <div class="result hidden" id="result">
 <span id="offerText"></span>
 <div style="text-align:center; margin-top:1em;"></div><div class="disclaimer">
@@ -140,13 +175,26 @@
 <p>Trade-ins processed via Asurion; credits begin within 2 bill cycles.</p>
 <p>Port-in or Financing a Device is required to qualify for promotional pricing.</p>
 <p>Prices before taxes and fees.</p>
+<p>"Switch & Save" Program does not require trade-in or port-in but requires device financing</p>
+<p>Home Internet required for eligibility with "Switch & Save"</p>
+<p>"Switch & Save" requires Unlimited Max plan</p>
 </div>
 <div style="text-align:center; margin-top:1em;">
 <button onclick="printResult()" style="background-color:#28a745;">Print Offer as Receipt</button>
 <button onclick="printFullPage()" style="background-color:#6c757d; margin-top: 0.5em;">Print Full Page Summary</button>
 <a href="https://braydenhanning.github.io/receiptinstructions/" target="_blank">
-<button style="background-color:#ffc107; color:#000; font-size: 0.9em; width: 100%;">
-    Help, my receipt is 50 miles long!
+  <button style="
+    background-color: #ffe02e;
+    color: #333;
+    font-size: 0.8em;
+    width: auto;
+    padding: 0.4em 0.8em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 0.5em;
+  ">
+    Help, my receipt is 50 miles long
   </button>
 </a>
 </div>
@@ -176,6 +224,8 @@
 <select name="qty_iPhone 16"><option>1</option><option>2</option><option>3</option></select><br/>
 <label><input name="device" type="checkbox" value="Galaxy S25|0|$0/mo with trade-in"/> Galaxy S25</label>
 <select name="qty_Galaxy S25"><option>1</option><option>2</option><option>3</option></select><br/>
+<label><input name="device" type="checkbox" value="Galaxy S25 Ultra|19.44|Up to $600 off with Unlimited"/> Galaxy S25 Ultra</label>
+<select name="qty_Galaxy S25 Ultra"><option>1</option><option>2</option><option>3</option></select><br/>
 <label><input name="device" type="checkbox" value="Galaxy A54|0|$0/mo with trade-in"/> Galaxy A54</label>
 <select name="qty_Galaxy A54"><option>1</option><option>2</option><option>3</option></select><br/>
 <label><input name="device" type="checkbox" value="Moto Razr 2025|15|$15/mo after $200 off"/> Moto Razr 2025</label>
@@ -187,8 +237,12 @@
 <select name="qty_iPad (A16)"><option>1</option><option>2</option><option>3</option></select><br/>
 </form>
 <button onclick="processMultipleDevices()">Continue</button>
-</div><script>
+</div>
+
+<script>
+  let isFinancingElsewhere = false;
     let isUnder90Days = false;
+    let isSwitchAndSaveEligible = false;
 let serviceTotal = 0;
 let deviceTotal = 0;
 let fullSummary = "";
@@ -240,13 +294,13 @@ function showResult(text) {
 }
 
 function handleDeviceSelection(choice) {
-  if (choice === 'no') {
-    deviceTotal = 0;
-    fullSummary += "\nDevice Promo: No device added";
-    displayFinalResult(0);
-  } else {
-    goToStep('modelSelect');
-  }
+if (choice === 'no') {
+  deviceTotal = 0;
+  isFinancingElsewhere = false;
+displayFinalResult(0);
+} else {
+  goToStep('modelSelect');
+}
 }
 
 function setDevicePromo(text) {
@@ -254,12 +308,33 @@ function setDevicePromo(text) {
 }
 
 function displayFinalResult(deviceAmount) {
+// No need to wipe the summary anymore
+// We already handle duplicate lines below
   deviceTotal = deviceAmount;
   const total = serviceTotal + deviceTotal;
+
+  // Build final output only once
+  fullSummary += "\nDevice Promo(s):";
+  
+  const form = document.getElementById("deviceForm");
+  const checkboxes = form ? form.querySelectorAll("input[type=checkbox]:checked") : [];
+  checkboxes.forEach(cb => {
+    const [label, costStr, promo] = cb.value.split("|");
+    const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
+    fullSummary += `\n${qty}x ${label} - $${parseFloat(costStr)}/mo each (${promo})`;
+  });
+
   fullSummary += "\nEstimated Monthly Total: $" + total;
+
+  // Add switch and save offer if eligible
+  if (isSwitchAndSaveEligible && isFinancingElsewhere) {
+    fullSummary += "\n\n You may be eligible for up to $2,000 back when paying off phones from other carriers ($400 per line) with our Switch & Save!";
+  }
+
   document.getElementById('offerText').innerText = fullSummary;
   goToStep('result');
 }
+
 </script><div class="question hidden" id="appleModels"><p>Select an Apple Device:</p>
 <div style="text-align:center; margin-bottom:1.5em;">
 <button onclick="setDevicePromo('iPhone 15 - Up to $500 off with trade-in'); displayFinalResult(0)">iPhone 15</button>
@@ -278,7 +353,7 @@ function displayFinalResult(deviceAmount) {
 </div>
 </div><div class="question hidden" id="samsungModels"><p>Select a Samsung Device:</p>
 <div style="text-align:center; margin-bottom:1.5em;">
-<button onclick="setDevicePromo('Galaxy S23 - $5/mo with trade-in'); displayFinalResult(5)">Galaxy S23</button>
+<button onclick="setDevicePromo('Galaxy S25 - $0/mo with trade-in'); displayFinalResult(5)">Galaxy S23</button>
 </div>
 <div style="text-align:center; margin-bottom:1.5em;">
 <button onclick="setDevicePromo('Galaxy A54 - $0/mo with trade-in'); displayFinalResult(0)">Galaxy A54</button>
@@ -286,14 +361,54 @@ function displayFinalResult(deviceAmount) {
 </div><div class="question hidden" id="motorolaModels"><p>Select a Motorola Device:</p>
 <div style="text-align:center; margin-bottom:1.5em;">
 <button onclick="setDevicePromo('Moto Razr 2025 - $15/mo after $200 off'); displayFinalResult(15)">Moto Razr 2025</button>
+<div style="text-align:center; margin-bottom:1.5em;">
+  <button onclick="setDevicePromo('Galaxy S25 Ultra - $19.44/mo (Up to $600 off with Unlimited)'); displayFinalResult(19.44)">Galaxy S25 Ultra</button>
+</div>
 </div>
 </div>
 <script>
+function restartTool() {
+  // Reset all global variables
+  isFinancingElsewhere = false;
+  isUnder90Days = false;
+  isSwitchAndSaveEligible = false;
+  serviceTotal = 0;
+  deviceTotal = 0;
+  fullSummary = "";
+  selectedServiceCost = 0;
+
+  // Reset form selections
+  const form = document.getElementById("deviceForm");
+  if (form) {
+    const checkboxes = form.querySelectorAll("input[type=checkbox]");
+    const selects = form.querySelectorAll("select");
+
+    checkboxes.forEach(cb => cb.checked = false);
+    selects.forEach(select => select.selectedIndex = 0);
+  }
+
+  // Hide result and all questions
+  document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
+  document.getElementById('result').classList.add('hidden');
+
+  // Show first step again
+  goToStep('step1');
+}
+
 function printResult() {
   const offerText = document.getElementById('offerText').innerText;
-  const legalFinePrint = isUnder90Days
-    ? '<p style="margin-top:2em; font-size:14px; color:#555;">*This offer is only valid within 90 days of internet service activation.</p>'
-    : '';
+let legalFinePrint = isUnder90Days
+  ? '<p style="margin-top:2em; font-size:14px; color:#555;">*This offer is only valid within 90 days of internet service activation.</p>'
+  : '';
+
+if (isSwitchAndSaveEligible) {
+  legalFinePrint += `
+<p style="font-size:14px; color:#555;">*Switch & Save does not require a trade-in or port-in.</p>
+<p style="font-size:14px; color:#555;">*A new device must be financed with Optimum to qualify.</p>
+<p style="font-size:14px; color:#555;">*Home internet is required for Switch & Save eligibility.</p>
+<p style="font-size:14px; color:#555;">*Switch & Save requires an Unlimited Max mobile plan.</p>
+  `;
+}
 
   const printWindow = window.open('', '_blank');
   printWindow.document.write(`
@@ -343,11 +458,20 @@ function printResult() {
 
 function printFullPage() {
   const offerText = document.getElementById('offerText').innerText;
-  const legalFinePrint = isUnder90Days
-    ? '<p style="margin-top:2em; font-size:14px; color:#555;">*This offer is only valid within 90 days of internet service activation.</p>'
-    : '';
+let legalFinePrint = isUnder90Days
+  ? '<p style="margin-top:2em; font-size:14px; color:#555;">*This offer is only valid within 90 days of internet service activation.</p>'
+  : '';
 
-  const printWindow = window.open('', '_blank');
+if (isSwitchAndSaveEligible) {
+  legalFinePrint += `
+<p style="font-size:14px; color:#555;">*Switch & Save does not require a trade-in or port-in.</p>
+<p style="font-size:14px; color:#555;">*A new device must be financed with Optimum to qualify.</p>
+<p style="font-size:14px; color:#555;">*Home internet is required for Switch & Save eligibility.</p>
+<p style="font-size:14px; color:#555;">*Switch & Save requires an Unlimited Max mobile plan.</p>
+  `;
+}
+
+const printWindow = window.open('', '_blank');
   printWindow.document.write(`
     <html>
     <head>
@@ -444,9 +568,11 @@ if (isIpad && !hasPhone) {
     const proceed = confirm("Financing is available for up to 5 devices every 90 days. For purchases exceeding this limit, the Pay In Full option remains available.\n\nDo you wish to continue?");
     if (!proceed) return;
   }
-
-  fullSummary += "\nDevice Promo(s):" + deviceSummary;
+if (isSwitchAndSaveEligible) {
+  goToStep('stillFinancingOther');
+} else {
   displayFinalResult(totalDeviceCost);
+}
 }
 
 function getMobileLineCount() {
