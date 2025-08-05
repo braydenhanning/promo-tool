@@ -74,6 +74,35 @@
     button:hover {
       background-color: #0056b3;
     }
+
+    @media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: #eee;
+  }
+
+  .container {
+    background: #1e1e1e;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
+  }
+
+  .result {
+    background-color: #2c2c2c;
+    border-left: 6px solid #90caf9;
+  }
+
+  button {
+    background-color: #2196f3;
+  }
+
+  button:hover {
+    background-color: #1565c0;
+  }
+
+  .disclaimer {
+    color: #aaa;
+  }
+}
   </style>
 </head>
 <body>
@@ -92,7 +121,7 @@
   padding: 0;
 ">Restart</button>
 
-<div class="container"><img alt="Optimum Logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png" style="display:block; margin: 0 auto 1em; max-width: 200px;"/>
+<div class="container"><img id="optimumLogo" alt="Optimum Logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png" style="display:block; margin: 0 auto 1em; max-width: 200px;"/>
 <h1>Mobile Promo Flow Tool</h1>
 <div class="question" id="step1">
   <p>Is the customer a new internet subscriber or under 90 days?</p>
@@ -303,30 +332,37 @@ displayFinalResult(0);
 }
 }
 
-function setDevicePromo(text) {
-  fullSummary += "\nDevice Promo: " + text;
+let manualDeviceText = "";
+
+function setDevicePromo(text, cost = 0) {
+  manualDeviceText = text;
+  deviceTotal = cost;
 }
 
-function displayFinalResult(deviceAmount) {
-// No need to wipe the summary anymore
-// We already handle duplicate lines below
-  deviceTotal = deviceAmount;
-  const total = serviceTotal + deviceTotal;
+function displayFinalResult() {
+  if (!serviceTotal) serviceTotal = selectedServiceCost; // Fix for direct single-device buttons
 
-  // Build final output only once
-  fullSummary += "\nDevice Promo(s):";
-  
   const form = document.getElementById("deviceForm");
   const checkboxes = form ? form.querySelectorAll("input[type=checkbox]:checked") : [];
-  checkboxes.forEach(cb => {
-    const [label, costStr, promo] = cb.value.split("|");
-    const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
-    fullSummary += `\n${qty}x ${label} - $${parseFloat(costStr)}/mo each (${promo})`;
-  });
 
-  fullSummary += "\nEstimated Monthly Total: $" + total;
+  let deviceSummaryText = "";
 
-  // Add switch and save offer if eligible
+  if (checkboxes.length > 0) {
+    deviceSummaryText += "\nDevice Promo(s):";
+    checkboxes.forEach(cb => {
+      const [label, costStr, promo] = cb.value.split("|");
+      const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
+      const monthlyCost = parseFloat(costStr);
+      deviceSummaryText += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
+    });
+  } else if (manualDeviceText) {
+    deviceSummaryText += `\nDevice Promo: ${manualDeviceText}`;
+  }
+
+  const total = serviceTotal + deviceTotal;
+
+  fullSummary += `${deviceSummaryText}\nEstimated Monthly Total: $${total}`;
+
   if (isSwitchAndSaveEligible && isFinancingElsewhere) {
     fullSummary += "\n\n You may be eligible for up to $2,000 back when paying off phones from other carriers ($400 per line) with our Switch & Save!";
   }
@@ -334,6 +370,7 @@ function displayFinalResult(deviceAmount) {
   document.getElementById('offerText').innerText = fullSummary;
   goToStep('result');
 }
+
 
 </script><div class="question hidden" id="appleModels"><p>Select an Apple Device:</p>
 <div style="text-align:center; margin-bottom:1.5em;">
@@ -356,15 +393,16 @@ function displayFinalResult(deviceAmount) {
 <button onclick="setDevicePromo('Galaxy S25 - $0/mo with trade-in'); displayFinalResult(5)">Galaxy S23</button>
 </div>
 <div style="text-align:center; margin-bottom:1.5em;">
+<button onclick="setDevicePromo('Galaxy S25 Ultra - $19.44/mo (Up to $600 off with Unlimited)', 19.44); displayFinalResult()">Galaxy S25 Ultra</button>
+</div>
+<div style="text-align:center; margin-bottom:1.5em;">
 <button onclick="setDevicePromo('Galaxy A54 - $0/mo with trade-in'); displayFinalResult(0)">Galaxy A54</button>
 </div>
-</div><div class="question hidden" id="motorolaModels"><p>Select a Motorola Device:</p>
+</div>
+<div class="question hidden" id="motorolaModels"><p>Select a Motorola Device:</p>
 <div style="text-align:center; margin-bottom:1.5em;">
 <button onclick="setDevicePromo('Moto Razr 2025 - $15/mo after $200 off'); displayFinalResult(15)">Moto Razr 2025</button>
-<div style="text-align:center; margin-bottom:1.5em;">
-  <button onclick="setDevicePromo('Galaxy S25 Ultra - $19.44/mo (Up to $600 off with Unlimited)'); displayFinalResult(19.44)">Galaxy S25 Ultra</button>
-</div>
-</div>
+  </div>
 </div>
 <script>
 function restartTool() {
@@ -591,8 +629,33 @@ window.onload = function () {
     selects.forEach(select => select.selectedIndex = 0);
   }
 };
-const radios = document.querySelectorAll("input[type=radio]");
-radios.forEach(r => r.checked = false);
+window.onload = function () {
+  const form = document.getElementById("deviceForm");
+  if (form) {
+    const checkboxes = form.querySelectorAll("input[type=checkbox]");
+    const selects = form.querySelectorAll("select");
+
+    checkboxes.forEach(cb => cb.checked = false);
+    selects.forEach(select => select.selectedIndex = 0);
+  }
+
+  const radios = document.querySelectorAll("input[type=radio]");
+  radios.forEach(r => r.checked = false);
+
+  const logo = document.getElementById("optimumLogo");
+
+  function updateLogoBasedOnTheme(e) {
+    const isDark = e.matches;
+    logo.src = isDark
+      ? "https://raw.githubusercontent.com/braydenhanning/promo-tool/refs/heads/main/data/Optimum_logo.png"
+      : "https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png";
+  }
+
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  updateLogoBasedOnTheme(mediaQuery); // Run on load
+  mediaQuery.addEventListener("change", updateLogoBasedOnTheme); // Run on theme change
+};
+
 </script>
 </body>
 </html>
