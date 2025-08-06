@@ -193,8 +193,8 @@
 
 <div class="question hidden" id="stillFinancingOther">
   <p>Is the customer still financing a phone with another carrier?</p>
-  <button onclick="isFinancingElsewhere = true; displayFinalResult(deviceTotal)">Yes</button>
-  <button onclick="isFinancingElsewhere = false; displayFinalResult(deviceTotal)">No</button>
+  <button onclick="isFinancingElsewhere = true; displayFinalResult()">Yes</button>
+  <button onclick="isFinancingElsewhere = false; displayFinalResult()">No</button>
 </div>
 
 <div class="result hidden" id="result">
@@ -241,8 +241,6 @@
 <div class="question hidden" id="modelSelect">
 <p>Select Mobile Devices (check all that apply and choose quantity):</p>
 <form id="deviceForm">
-<!-- Apple -->
-<!-- Phones -->
 <label><input name="device" type="checkbox" value="iPhone 15|6.37|Up to $500 off with trade-in"/> iPhone 15</label>
 <select name="qty_iPhone 15"><option>1</option><option>2</option><option>3</option></select><br/>
 <label><input name="device" type="checkbox" value="iPhone 15 Plus|9.14|Up to $500 off with trade-in"/> iPhone 15 Plus</label>
@@ -259,7 +257,6 @@
 <select name="qty_Galaxy A54"><option>1</option><option>2</option><option>3</option></select><br/>
 <label><input name="device" type="checkbox" value="Moto Razr 2025|15|$15/mo after $200 off"/> Moto Razr 2025</label>
 <select name="qty_Moto Razr 2025"><option>1</option><option>2</option><option>3</option></select><br/>
-<!-- Add-On Section -->
 <hr style="margin: 1.5em 0;"/>
 <strong style="font-size: 1.1em;">Choose an Add-On Device</strong><br/><br/>
 <label><input name="device" type="checkbox" value="iPad (A16)|8.30|$200 off"/> iPad (A16)</label>
@@ -268,394 +265,356 @@
 <button onclick="processMultipleDevices()">Continue</button>
 </div>
 
-<script>
-  let isFinancingElsewhere = false;
-    let isUnder90Days = false;
-    let isSwitchAndSaveEligible = false;
-let serviceTotal = 0;
-let deviceTotal = 0;
-let fullSummary = "";
-let selectedServiceCost = 0; // Stores the original mobile plan amount
-
-
-function goToStep(step) {
-  document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
-  const el = document.getElementById(step);
-  if (el) el.classList.remove('hidden');
-  if (step !== 'result') document.getElementById('result').classList.add('hidden');
-}
-
-function showResult(text) {
-  const beforeAfter = text.split('After')[0];
-  const match = beforeAfter.match(/\$([\d.]+)/); // Handles decimals like 36.67
-  selectedServiceCost = match ? parseFloat(match[1]) : 0;
-  const serviceLines = getMobileLineCount();
-
-  const form = document.getElementById("deviceForm");
-  const checkboxes = form ? form.querySelectorAll("input[type=checkbox]:checked") : [];
-  let hasIpad = false;
-  let hasPhone = false;
-  let deviceSummary = "";
-  totalDeviceCost = 0;
-
-  checkboxes.forEach(cb => {
-    const [label, costStr, promo] = cb.value.split("|");
-    const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
-    let monthlyCost = parseFloat(costStr);
-    const isIpad = label.toLowerCase().includes("ipad");
-
-    if (isIpad) hasIpad = true;
-    else hasPhone = true;
-
-    totalDeviceCost += qty * monthlyCost;
-    deviceSummary += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
-  });
-
-  if ((serviceLines === 1 && hasIpad && !hasPhone) || (hasIpad && !hasPhone)) {
-    fullSummary = `Recommended Offer: $${serviceLines * 45} for ${serviceLines} line${serviceLines > 1 ? 's' : ''} – Promo: No promo code available`;
-    serviceTotal = serviceLines * 45;
-  } else {
-    fullSummary = "Recommended Offer: " + text;
-    serviceTotal = selectedServiceCost;
-  }
-
-  goToStep('devicePrompt');
-}
-
-function handleDeviceSelection(choice) {
-if (choice === 'no') {
-  deviceTotal = 0;
-  isFinancingElsewhere = false;
-displayFinalResult(0);
-} else {
-  goToStep('modelSelect');
-}
-}
-
-let manualDeviceText = "";
-
-function setDevicePromo(text, cost = 0) {
-  manualDeviceText = text;
-  deviceTotal = cost;
-}
-
-function displayFinalResult() {
-  if (!serviceTotal) serviceTotal = selectedServiceCost; // Fix for direct single-device buttons
-
-  const form = document.getElementById("deviceForm");
-  const checkboxes = form ? form.querySelectorAll("input[type=checkbox]:checked") : [];
-
-  let deviceSummaryText = "";
-
-  if (checkboxes.length > 0) {
-    deviceSummaryText += "\nDevice Promo(s):";
-    checkboxes.forEach(cb => {
-      const [label, costStr, promo] = cb.value.split("|");
-      const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
-      const monthlyCost = parseFloat(costStr);
-      deviceSummaryText += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
-    });
-  } else if (manualDeviceText) {
-    deviceSummaryText += `\nDevice Promo: ${manualDeviceText}`;
-  }
-
-  const total = serviceTotal + deviceTotal;
-
-  fullSummary += `${deviceSummaryText}\nEstimated Monthly Total: $${total}`;
-
-  if (isSwitchAndSaveEligible && isFinancingElsewhere) {
-    fullSummary += "\n\n You may be eligible for up to $2,000 back when paying off phones from other carriers ($400 per line) with our Switch & Save!";
-  }
-
-  document.getElementById('offerText').innerText = fullSummary;
-  goToStep('result');
-}
-
-
-</script><div class="question hidden" id="appleModels"><p>Select an Apple Device:</p>
+<div class="question hidden" id="appleModels"><p>Select an Apple Device:</p>
 <div style="text-align:center; margin-bottom:1.5em;">
-<button onclick="setDevicePromo('iPhone 15 - Up to $500 off with trade-in'); displayFinalResult(0)">iPhone 15</button>
+<button onclick="setDevicePromo('iPhone 15 - Up to $500 off with trade-in', 0)">iPhone 15</button>
 </div>
 <div style="text-align:center; margin-bottom:1.5em;">
-<button onclick="setDevicePromo('iPhone 15 Plus - Up to $500 off with trade-in'); displayFinalResult(0)">iPhone 15 Plus</button>
+<button onclick="setDevicePromo('iPhone 15 Plus - Up to $500 off with trade-in', 0)">iPhone 15 Plus</button>
 </div>
 <div style="text-align:center; margin-bottom:1.5em;">
-<button onclick="setDevicePromo('iPhone 16e - $0/mo with $100+ trade-in'); displayFinalResult(0)">iPhone 16e</button>
+<button onclick="setDevicePromo('iPhone 16e - $0/mo with $100+ trade-in', 0)">iPhone 16e</button>
 </div>
 <div style="text-align:center; margin-bottom:1.5em;">
-<button onclick="setDevicePromo('iPhone 16 - Free with $225+ trade-in'); displayFinalResult(0)">iPhone 16</button>
+<button onclick="setDevicePromo('iPhone 16 - Free with $225+ trade-in', 0)">iPhone 16</button>
 </div>
 <div style="text-align:center; margin-bottom:1.5em;">
-<button onclick="setDevicePromo('iPad (A16) - $10/mo after $200 off'); displayFinalResult(10)">iPad (A16)</button>
+<button onclick="setDevicePromo('iPad (A16) - $10/mo after $200 off', 10)">iPad (A16)</button>
 </div>
 </div><div class="question hidden" id="samsungModels"><p>Select a Samsung Device:</p>
 <div style="text-align:center; margin-bottom:1.5em;">
-<button onclick="setDevicePromo('Galaxy S25 - $0/mo with trade-in'); displayFinalResult(5)">Galaxy S23</button>
+<button onclick="setDevicePromo('Galaxy S25 - $0/mo with trade-in', 0)">Galaxy S23</button>
 </div>
 <div style="text-align:center; margin-bottom:1.5em;">
-<button onclick="setDevicePromo('Galaxy S25 Ultra - $19.44/mo (Up to $600 off with Unlimited)', 19.44); displayFinalResult()">Galaxy S25 Ultra</button>
+<button onclick="setDevicePromo('Galaxy S25 Ultra - $19.44/mo (Up to $600 off with Unlimited)', 19.44)">Galaxy S25 Ultra</button>
 </div>
 <div style="text-align:center; margin-bottom:1.5em;">
-<button onclick="setDevicePromo('Galaxy A54 - $0/mo with trade-in'); displayFinalResult(0)">Galaxy A54</button>
+<button onclick="setDevicePromo('Galaxy A54 - $0/mo with trade-in', 0)">Galaxy A54</button>
 </div>
 </div>
 <div class="question hidden" id="motorolaModels"><p>Select a Motorola Device:</p>
 <div style="text-align:center; margin-bottom:1.5em;">
-<button onclick="setDevicePromo('Moto Razr 2025 - $15/mo after $200 off'); displayFinalResult(15)">Moto Razr 2025</button>
+<button onclick="setDevicePromo('Moto Razr 2025 - $15/mo after $200 off', 15)">Moto Razr 2025</button>
   </div>
 </div>
 <script>
-function restartTool() {
-  // Reset all global variables
-  isFinancingElsewhere = false;
-  isUnder90Days = false;
-  isSwitchAndSaveEligible = false;
-  serviceTotal = 0;
-  deviceTotal = 0;
-  fullSummary = "";
-  selectedServiceCost = 0;
+  let isFinancingElsewhere = false;
+  let isUnder90Days = false;
+  let isSwitchAndSaveEligible = false;
+  let serviceTotal = 0;
+  let deviceTotal = 0; // The monthly cost for a single device
+  let fullSummary = "";
+  let selectedServiceCost = 0; // Stores the original mobile plan amount
+  let manualDeviceText = ""; // The promo text for a single device
 
-  // Reset form selections
-  const form = document.getElementById("deviceForm");
-  if (form) {
-    const checkboxes = form.querySelectorAll("input[type=checkbox]");
-    const selects = form.querySelectorAll("select");
-
-    checkboxes.forEach(cb => cb.checked = false);
-    selects.forEach(select => select.selectedIndex = 0);
+  function goToStep(step) {
+    document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
+    const el = document.getElementById(step);
+    if (el) el.classList.remove('hidden');
+    if (step !== 'result') document.getElementById('result').classList.add('hidden');
   }
 
-  // Hide result and all questions
-  document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
-  document.getElementById('result').classList.add('hidden');
+  function showResult(text) {
+    const beforeAfter = text.split('After')[0];
+    const match = beforeAfter.match(/\$([\d.]+)/); // Handles decimals like 36.67
+    selectedServiceCost = match ? parseFloat(match[1]) : 0;
+    const serviceLines = getMobileLineCount();
 
-  // Show first step again
-  goToStep('step1');
-}
+    fullSummary = "Recommended Offer: " + text;
+    serviceTotal = selectedServiceCost;
+    
+    manualDeviceText = ""; // Reset single-device promo text
+    deviceTotal = 0; // Reset single-device cost
 
-function printResult() {
-  const offerText = document.getElementById('offerText').innerText;
-let legalFinePrint = isUnder90Days
-  ? '<p style="margin-top:2em; font-size:14px; color:#555;">*This offer is only valid within 90 days of internet service activation.</p>'
-  : '';
+    goToStep('devicePrompt');
+  }
 
-if (isSwitchAndSaveEligible) {
-  legalFinePrint += `
-<p style="font-size:14px; color:#555;">*Switch & Save does not require a trade-in or port-in.</p>
-<p style="font-size:14px; color:#555;">*A new device must be financed with Optimum to qualify.</p>
-<p style="font-size:14px; color:#555;">*Home internet is required for Switch & Save eligibility.</p>
-<p style="font-size:14px; color:#555;">*Switch & Save requires an Unlimited Max mobile plan.</p>
-  `;
-}
+  function handleDeviceSelection(choice) {
+    if (choice === 'no') {
+      deviceTotal = 0;
+      manualDeviceText = "";
+      isFinancingElsewhere = false;
+      displayFinalResult();
+    } else {
+      goToStep('modelSelect');
+    }
+  }
 
+  function setDevicePromo(text, cost = 0) {
+    manualDeviceText = text;
+    deviceTotal = cost;
+    
+    if (isSwitchAndSaveEligible) {
+      goToStep('stillFinancingOther');
+    } else {
+      displayFinalResult();
+    }
+  }
+
+  function displayFinalResult() {
+    if (!serviceTotal) serviceTotal = selectedServiceCost;
+
+    let finalDeviceTotal = 0;
+    let deviceSummaryText = "";
+    
+    if (manualDeviceText) {
+        finalDeviceTotal = deviceTotal;
+        deviceSummaryText = `\nDevice Promo(s):\n${manualDeviceText}`;
+    } else {
+        const form = document.getElementById("deviceForm");
+        if (form) {
+          const checkboxes = form.querySelectorAll("input[type=checkbox]:checked");
+          checkboxes.forEach(cb => {
+            const [label, costStr, promo] = cb.value.split("|");
+            const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
+            const monthlyCost = parseFloat(costStr);
+            finalDeviceTotal += qty * monthlyCost;
+            deviceSummaryText += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
+          });
+        }
+    }
+
+    const total = serviceTotal + finalDeviceTotal;
+
+    fullSummary += `${deviceSummaryText}\nEstimated Monthly Total: $${total}`;
+
+    if (isSwitchAndSaveEligible && isFinancingElsewhere) {
+      fullSummary += "\n\n You may be eligible for up to $2,000 back when paying off phones from other carriers ($400 per line) with our Switch & Save!";
+    }
+
+    document.getElementById('offerText').innerText = fullSummary;
+    goToStep('result');
+  }
+
+  function processMultipleDevices() {
+    manualDeviceText = "";
+    deviceTotal = 0;
+    const form = document.getElementById("deviceForm");
+    const checkboxes = form.querySelectorAll("input[type=checkbox]:checked");
+    let totalDeviceCost = 0;
+    let totalDevices = 0;
+    let hasPhone = false;
+    let hasIpad = false;
+  
+    serviceTotal = selectedServiceCost;
+  
+    checkboxes.forEach(cb => {
+      const [label, costStr, promo] = cb.value.split("|");
+      const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
+      const monthlyCost = parseFloat(costStr);
+  
+      const isIpad = label.includes("iPad");
+      const isPhone = !isIpad;
+  
+      if (isIpad) hasIpad = true;
+      if (isPhone) hasPhone = true;
+  
+      if (isIpad && !hasPhone) {
+        const extraService = qty * 45;
+        serviceTotal += extraService;
+      }
+  
+      totalDeviceCost += qty * monthlyCost;
+      totalDevices += qty;
+    });
+  
+    if (totalDevices > 0 && totalDevices > getMobileLineCount()) {
+      alert(`You selected ${totalDevices} device(s), but only ${getMobileLineCount()} mobile line(s). Each device must have a line.`);
+      return;
+    }
+  
+    if (totalDevices > 5) {
+      const proceed = confirm("Financing is available for up to 5 devices every 90 days. For purchases exceeding this limit, the Pay In Full option remains available.\n\nDo you wish to continue?");
+      if (!proceed) return;
+    }
+    if (isSwitchAndSaveEligible) {
+      goToStep('stillFinancingOther');
+    } else {
+      displayFinalResult();
+    }
+  }
+
+  function getMobileLineCount() {
+    if (!fullSummary.includes("line")) return 0;
+    const match = fullSummary.match(/(\d+)\s+line/);
+    return match ? parseInt(match[1]) : 0;
+  }
+  
+  function restartTool() {
+    isFinancingElsewhere = false;
+    isUnder90Days = false;
+    isSwitchAndSaveEligible = false;
+    serviceTotal = 0;
+    deviceTotal = 0;
+    fullSummary = "";
+    selectedServiceCost = 0;
+    manualDeviceText = "";
+
+    const form = document.getElementById("deviceForm");
+    if (form) {
+      const checkboxes = form.querySelectorAll("input[type=checkbox]");
+      const selects = form.querySelectorAll("select");
+      checkboxes.forEach(cb => cb.checked = false);
+      selects.forEach(select => select.selectedIndex = 0);
+    }
+    document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
+    document.getElementById('result').classList.add('hidden');
+    goToStep('step1');
+  }
+
+  function printResult() {
+    const offerText = document.getElementById('offerText').innerText;
+    let legalFinePrint = isUnder90Days
+      ? '<p style="margin-top:2em; font-size:14px; color:#555;">*This offer is only valid within 90 days of internet service activation.</p>'
+      : '';
+  
+    if (isSwitchAndSaveEligible) {
+      legalFinePrint += `
+  <p style="font-size:14px; color:#555;">*Switch & Save does not require a trade-in or port-in.</p>
+  <p style="font-size:14px; color:#555;">*A new device must be financed with Optimum to qualify.</p>
+  <p style="font-size:14px; color:#555;">*Home internet is required for Switch & Save eligibility.</p>
+  <p style="font-size:14px; color:#555;">*Switch & Save requires an Unlimited Max mobile plan.</p>
+      `;
+    }
+  
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Offer</title>
+          <style>
+    @media print {
+      @page {
+        size: 58mm auto;
+        margin: 0;
+      }
+      body {
+        width: 58mm;
+        margin: 0;
+        padding: 0;
+        font-family: monospace;
+        font-size: 10pt;
+        line-height: 1.4;
+      }
+      .summary {
+        white-space: pre-wrap;
+        word-break: break-word;
+        margin: 0;
+        padding: 0;
+      }
+    }
+  </style>
+        </head>
+        <body>
+          <pre class="summary">${offerText}</pre>
+          ${legalFinePrint}
+          <p style="margin-top:1em; font-size:14px; color:#555;">*Promotional credits may take up to 2 billing cycles to appear on the account.</p>
+          <p style="font-size:14px; color:#555;">*Port-in or device financing may be required for promotional eligibility.</p>
+          <p style="font-size:14px; color:#555;">*Prices before taxes and fees.</p>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+    }, 500);
+  }
+
+  function printFullPage() {
+    const offerText = document.getElementById('offerText').innerText;
+    let legalFinePrint = isUnder90Days
+      ? '<p style="margin-top:2em; font-size:14px; color:#555;">*This offer is only valid within 90 days of internet service activation.</p>'
+      : '';
+  
+    if (isSwitchAndSaveEligible) {
+      legalFinePrint += `
+  <p style="font-size:14px; color:#555;">*Switch & Save does not require a trade-in or port-in.</p>
+  <p style="font-size:14px; color:#555;">*A new device must be financed with Optimum to qualify.</p>
+  <p style="font-size:14px; color:#555;">*Home internet is required for Switch & Save eligibility.</p>
+  <p style="font-size:14px; color:#555;">*Switch & Save requires an Unlimited Max mobile plan.</p>
+      `;
+    }
+  
   const printWindow = window.open('', '_blank');
-  printWindow.document.write(`
-    <html>
+    printWindow.document.write(`
+      <html>
       <head>
         <title>Print Offer</title>
         <style>
-  @media print {
-    @page {
-      size: 58mm auto;
-      margin: 0;
-    }
-
-    body {
-      width: 58mm;
-      margin: 0;
-      padding: 0;
-      font-family: monospace;
-      font-size: 10pt;
-      line-height: 1.4;
-    }
-
-    .summary {
-      white-space: pre-wrap;
-      word-break: break-word;
-      margin: 0;
-      padding: 0;
-    }
-  }
-</style>
+          @media print {
+            .no-print { display: none; }
+          }
+          body {
+            font-family: sans-serif;
+            padding: 40px;
+            font-size: 18px;
+            line-height: 1.6;
+          }
+          h2 {
+            color: #2760f0;
+            text-align: center;
+          }
+          .summary {
+            white-space: pre-wrap;
+            background: #e6f4ea;
+            padding: 20px;
+            border-left: 6px solid #007bff;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 1em;
+          }
+          .logo {
+            display: block;
+            max-width: 200px;
+            margin: 0 auto;
+          }
+        </style>
       </head>
       <body>
-        <pre class="summary">${offerText}</pre>
+        <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png" alt="Optimum Logo" />
+        <h2>Mobile Promo Summary</h2>
+        <div class="summary">${offerText}</div>
         ${legalFinePrint}
         <p style="margin-top:1em; font-size:14px; color:#555;">*Promotional credits may take up to 2 billing cycles to appear on the account.</p>
         <p style="font-size:14px; color:#555;">*Port-in or device financing may be required for promotional eligibility.</p>
-        <p style="font-size:14px; color:#555;">*Prices before taxes and fees.</p>
+  <p style="font-size:14px; color:#555;">*Prices before taxes and fees.</p>
       </body>
-    </html>
-  `);
-  printWindow.document.close();
-  printWindow.focus();
-  setTimeout(() => {
-    printWindow.print();
-  }, 500);
-}
-
-function printFullPage() {
-  const offerText = document.getElementById('offerText').innerText;
-let legalFinePrint = isUnder90Days
-  ? '<p style="margin-top:2em; font-size:14px; color:#555;">*This offer is only valid within 90 days of internet service activation.</p>'
-  : '';
-
-if (isSwitchAndSaveEligible) {
-  legalFinePrint += `
-<p style="font-size:14px; color:#555;">*Switch & Save does not require a trade-in or port-in.</p>
-<p style="font-size:14px; color:#555;">*A new device must be financed with Optimum to qualify.</p>
-<p style="font-size:14px; color:#555;">*Home internet is required for Switch & Save eligibility.</p>
-<p style="font-size:14px; color:#555;">*Switch & Save requires an Unlimited Max mobile plan.</p>
-  `;
-}
-
-const printWindow = window.open('', '_blank');
-  printWindow.document.write(`
-    <html>
-    <head>
-      <title>Print Offer</title>
-      <style>
-        @media print {
-          .no-print { display: none; }
-        }
-        body {
-          font-family: sans-serif;
-          padding: 40px;
-          font-size: 18px;
-          line-height: 1.6;
-        }
-        h2 {
-          color: #2760f0;
-          text-align: center;
-        }
-        .summary {
-          white-space: pre-wrap;
-          background: #e6f4ea;
-          padding: 20px;
-          border-left: 6px solid #007bff;
-          border-radius: 8px;
-          font-weight: bold;
-          margin-top: 1em;
-        }
-        .logo {
-          display: block;
-          max-width: 200px;
-          margin: 0 auto;
-        }
-      </style>
-    </head>
-    <body>
-      <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png" alt="Optimum Logo" />
-      <h2>Mobile Promo Summary</h2>
-      <div class="summary">${offerText}</div>
-      ${legalFinePrint}
-      <p style="margin-top:1em; font-size:14px; color:#555;">*Promotional credits may take up to 2 billing cycles to appear on the account.</p>
-      <p style="font-size:14px; color:#555;">*Port-in or device financing may be required for promotional eligibility.</p>
-<p style="font-size:14px; color:#555;">*Prices before taxes and fees.</p>
-    </body>
-    </html>
-  `);
-  printWindow.document.close();
-  printWindow.focus();
-  setTimeout(() => {
-    printWindow.print();
-  }, 500); // 0.5 second delay
-}
-
-// existing functions like goToStep, showResult, etc.
-
-function processMultipleDevices() {
-  const form = document.getElementById("deviceForm");
-  const checkboxes = form.querySelectorAll("input[type=checkbox]:checked");
-  let deviceSummary = "";
-  let totalDeviceCost = 0;
-  let totalDevices = 0;
-  let hasPhone = false;
-  let hasIpad = false;
-
-serviceTotal = selectedServiceCost;
-
-  checkboxes.forEach(cb => {
-    const [label, costStr, promo] = cb.value.split("|");
-    const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
-    const monthlyCost = parseFloat(costStr);
-
-    const isIpad = label.includes("iPad");
-    const isPhone = !isIpad;
-
-    if (isIpad) hasIpad = true;
-    if (isPhone) hasPhone = true;
-
-    // Adjust iPad service pricing
-if (isIpad && !hasPhone) {
-  const extraService = qty * 45;
-  serviceTotal += extraService;
-}
-
-    totalDeviceCost += qty * monthlyCost;
-    deviceSummary += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
-    totalDevices += qty;
-  });
-
-  if (totalDevices > 0 && totalDevices > getMobileLineCount()) {
-    alert(`You selected ${totalDevices} device(s), but only ${getMobileLineCount()} mobile line(s). Each device must have a line.`);
-    return;
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+    }, 500); // 0.5 second delay
   }
 
-  if (totalDevices > 5) {
-    const proceed = confirm("Financing is available for up to 5 devices every 90 days. For purchases exceeding this limit, the Pay In Full option remains available.\n\nDo you wish to continue?");
-    if (!proceed) return;
-  }
-if (isSwitchAndSaveEligible) {
-  goToStep('stillFinancingOther');
-} else {
-  displayFinalResult(totalDeviceCost);
-}
-}
+  window.onload = function () {
+    const form = document.getElementById("deviceForm");
+    if (form) {
+      const checkboxes = form.querySelectorAll("input[type=checkbox]");
+      const selects = form.querySelectorAll("select");
 
-function getMobileLineCount() {
-  if (!fullSummary.includes("line")) return 0;
-  const match = fullSummary.match(/(\d+)\s+line/);
-  return match ? parseInt(match[1]) : 0;
-}
-
-window.onload = function () {
-  const form = document.getElementById("deviceForm");
-  if (form) {
-    const checkboxes = form.querySelectorAll("input[type=checkbox]");
-    const selects = form.querySelectorAll("select");
-
-    checkboxes.forEach(cb => cb.checked = false);
-    selects.forEach(select => select.selectedIndex = 0);
-  }
-};
-window.onload = function () {
-  const form = document.getElementById("deviceForm");
-  if (form) {
-    const checkboxes = form.querySelectorAll("input[type=checkbox]");
-    const selects = form.querySelectorAll("select");
-
-    checkboxes.forEach(cb => cb.checked = false);
-    selects.forEach(select => select.selectedIndex = 0);
-  }
-
-  const radios = document.querySelectorAll("input[type=radio]");
-  radios.forEach(r => r.checked = false);
-
-  const logo = document.getElementById("optimumLogo");
-
-  function updateLogoBasedOnTheme(e) {
-    const isDark = e.matches;
-    logo.src = isDark
-      ? "https://raw.githubusercontent.com/braydenhanning/promo-tool/refs/heads/main/data/Optimum_logo.png"
-      : "https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png";
-  }
-
-  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-  updateLogoBasedOnTheme(mediaQuery); // Run on load
-  mediaQuery.addEventListener("change", updateLogoBasedOnTheme); // Run on theme change
-};
-
+      checkboxes.forEach(cb => cb.checked = false);
+      selects.forEach(select => select.selectedIndex = 0);
+    }
+  
+    const radios = document.querySelectorAll("input[type=radio]");
+    radios.forEach(r => r.checked = false);
+  
+    const logo = document.getElementById("optimumLogo");
+  
+    function updateLogoBasedOnTheme(e) {
+      const isDark = e.matches;
+      logo.src = isDark
+        ? "https://raw.githubusercontent.com/braydenhanning/promo-tool/refs/heads/main/data/Optimum_logo.png"
+        : "https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png";
+    }
+  
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    updateLogoBasedOnTheme(mediaQuery);
+    mediaQuery.addEventListener("change", updateLogoBasedOnTheme);
+  };
 </script>
 </body>
 </html>
