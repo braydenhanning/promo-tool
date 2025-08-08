@@ -50,12 +50,12 @@
       font-weight: bold;
     }
 
-    .disclaimer {
-      font-weight: normal;
-      font-size: 0.95em;
-      margin-top: 0.75em;
-      color: #555;
-    }
+.disclaimer {
+  font-weight: normal;
+  font-size: 0.95em;
+  margin-top: 0.75em;
+  color: #333; /* This will make the fine print a darker gray */
+}
 
     button {
       display: block;
@@ -465,15 +465,15 @@
   function printResult() {
     const offerText = document.getElementById('offerText').innerText;
     let legalFinePrint = isUnder90Days
-      ? '<p style="margin-top:2em; font-size:14px; color:#555;">*This offer is only valid within 90 days of internet service activation.</p>'
+      ? '<p style="margin-top:2em; font-size:14px; color:#000;">*This offer is only valid within 90 days of internet service activation.</p>'
       : '';
   
     if (isSwitchAndSaveEligible) {
       legalFinePrint += `
-  <p style="font-size:14px; color:#555;">*Switch & Save does not require a trade-in or port-in.</p>
-  <p style="font-size:14px; color:#555;">*A new device must be financed with Optimum to qualify.</p>
-  <p style="font-size:14px; color:#555;">*Home internet is required for Switch & Save eligibility.</p>
-  <p style="font-size:14px; color:#555;">*Switch & Save requires an Unlimited Max mobile plan.</p>
+  <p style="font-size:14px; color:#000;">*Switch & Save does not require a trade-in or port-in.</p>
+  <p style="font-size:14px; color:#000;">*A new device must be financed with Optimum to qualify.</p>
+  <p style="font-size:14px; color:#000;">*Home internet is required for Switch & Save eligibility.</p>
+  <p style="font-size:14px; color:#000;">*Switch & Save requires an Unlimited Max mobile plan.</p>
       `;
     }
   
@@ -508,9 +508,9 @@
         <body>
           <pre class="summary">${offerText}</pre>
           ${legalFinePrint}
-          <p style="margin-top:1em; font-size:14px; color:#555;">*Promotional credits may take up to 2 billing cycles to appear on the account.</p>
-          <p style="font-size:14px; color:#555;">*Port-in or device financing may be required for promotional eligibility.</p>
-          <p style="font-size:14px; color:#555;">*Prices before taxes and fees.</p>
+          <p style="margin-top:1em; font-size:14px; color:#000;">*Promotional credits may take up to 2 billing cycles to appear on the account.</p>
+  <p style="font-size:14px; color:#000;">*Port-in or device financing may be required for promotional eligibility.</p>
+  <p style="font-size:14px; color:#000;">*Prices before taxes and fees.</p>
         </body>
       </html>
     `);
@@ -524,15 +524,15 @@
   function printFullPage() {
     const offerText = document.getElementById('offerText').innerText;
     let legalFinePrint = isUnder90Days
-      ? '<p style="margin-top:2em; font-size:14px; color:#555;">*This offer is only valid within 90 days of internet service activation.</p>'
+      ? '<p style="margin-top:2em; font-size:14px; color:#000;">*This offer is only valid within 90 days of internet service activation.</p>'
       : '';
   
     if (isSwitchAndSaveEligible) {
       legalFinePrint += `
-  <p style="font-size:14px; color:#555;">*Switch & Save does not require a trade-in or port-in.</p>
-  <p style="font-size:14px; color:#555;">*A new device must be financed with Optimum to qualify.</p>
-  <p style="font-size:14px; color:#555;">*Home internet is required for Switch & Save eligibility.</p>
-  <p style="font-size:14px; color:#555;">*Switch & Save requires an Unlimited Max mobile plan.</p>
+  <p style="font-size:14px; color:#000;">*Switch & Save does not require a trade-in or port-in.</p>
+  <p style="font-size:14px; color:#000;">*A new device must be financed with Optimum to qualify.</p>
+  <p style="font-size:14px; color:#000;">*Home internet is required for Switch & Save eligibility.</p>
+  <p style="font-size:14px; color:#000;">*Switch & Save requires an Unlimited Max mobile plan.</p>
       `;
     }
   
@@ -576,9 +576,9 @@
         <h2>Mobile Promo Summary</h2>
         <div class="summary">${offerText}</div>
         ${legalFinePrint}
-        <p style="margin-top:1em; font-size:14px; color:#555;">*Promotional credits may take up to 2 billing cycles to appear on the account.</p>
-        <p style="font-size:14px; color:#555;">*Port-in or device financing may be required for promotional eligibility.</p>
-  <p style="font-size:14px; color:#555;">*Prices before taxes and fees.</p>
+        <p style="margin-top:1em; font-size:14px; color:#000;">*Promotional credits may take up to 2 billing cycles to appear on the account.</p>
+        <p style="font-size:14px; color:#000;">*Port-in or device financing may be required for promotional eligibility.</p>
+  <p style="font-size:14px; color:#000;">*Prices before taxes and fees.</p>
       </body>
       </html>
     `);
