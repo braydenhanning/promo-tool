@@ -207,6 +207,23 @@
 <p>"Switch & Save" Program does not require trade-in or port-in but requires device financing</p>
 <p>Home Internet required for eligibility with "Switch & Save"</p>
 <p>"Switch & Save" requires Unlimited Max plan</p>
+  <div id="tenDollarPromoDisclaimer" class="hidden">
+    <hr>
+    <p style="font-weight: bold;">$10 Deal Fine Print:</p>
+    <ul>
+      <li>Must port-in or finance a device</li>
+      <li>After 12 months customer would roll to $25 for one line</li>
+      <li>Customer must take Unlimited mobile plan to qualify</li>
+      <li>1GB, 5GB and Unlimited Max plans do not qualify</li>
+      <li>Max of 1 line</li>
+      <li>Cannot be combined with other mobile service offers</li>
+      <li>Port-in must be completed within 21 days to be eligible</li>
+      <li>Any fixed internet speed, must have internet service</li>
+      <li>Credits will continue for 12 months starting at first month the credit is received</li>
+      <li>If customer disconnects fixed internet service within 12-month period or no longer takes qualify unlimited plan they will lose eligibility for free unlimited lines and the credits will be removed</li>
+    </ul>
+    <p>Promo Code: **ONEFOR10**</p>
+  </div>
 </div>
 <div style="text-align:center; margin-top:1em;">
 <button onclick="printResult()" style="background-color:#28a745;">Print Offer as Receipt</button>
@@ -298,6 +315,7 @@
   </div>
 </div>
 <script>
+  let isTenDollarPromo = false;
   let isFinancingElsewhere = false;
   let isUnder90Days = false;
   let isSwitchAndSaveEligible = false;
@@ -328,6 +346,28 @@
 
     goToStep('devicePrompt');
   }
+
+  function showResult(text) {
+    const beforeAfter = text.split('After')[0];
+    const match = beforeAfter.match(/\$([\d.]+)/);
+    selectedServiceCost = match ? parseFloat(match[1]) : 0;
+    
+    // Check if the promo code is ONEFOR10
+    if (text.includes("ONEFOR10")) {
+        isTenDollarPromo = true;
+    } else {
+        isTenDollarPromo = false; // Reset the flag for other promos
+    }
+
+    const serviceLines = getMobileLineCount();
+    fullSummary = "Recommended Offer: " + text;
+    serviceTotal = selectedServiceCost;
+    
+    manualDeviceText = "";
+    deviceTotal = 0;
+
+    goToStep('devicePrompt');
+}
 
   function handleDeviceSelection(choice) {
     if (choice === 'no') {
@@ -372,7 +412,17 @@
             deviceSummaryText += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
           });
         }
+
+         document.getElementById('offerText')
+           // Show the $10 promo fine print if the flag is true
+    if (isTenDollarPromo) {
+      document.getElementById('tenDollarPromoDisclaimer').classList.remove('hidden');
+    } else {
+      document.getElementById('tenDollarPromoDisclaimer').classList.add('hidden');
     }
+
+    goToStep('result');
+}
 
     const total = serviceTotal + finalDeviceTotal;
 
@@ -476,7 +526,25 @@
   <p style="font-size:14px; color:#000;">*Switch & Save requires an Unlimited Max mobile plan.</p>
       `;
     }
-  
+
+      if (isTenDollarPromo) {
+    legalFinePrint += `
+      <p style="margin-top:1em; font-weight:bold; color:#000;">$10 Deal Fine Print:</p>
+      <ul>
+        <li>Must port-in or finance a device</li>
+        <li>After 12 months customer would roll to $25 for one line</li>
+        <li>Customer must take Unlimited mobile plan to qualify</li>
+        <li>1GB, 5GB and Unlimited Max plans do not qualify</li>
+        <li>Max of 1 line</li>
+        <li>Cannot be combined with other mobile service offers</li>
+        <li>Port-in must be completed within 21 days to be eligible</li>
+        <li>Any fixed internet speed, must have internet service</li>
+        <li>Credits will continue for 12 months starting at first month the credit is received</li>
+        <li>If customer disconnects fixed internet service within 12-month period or no longer takes qualify unlimited plan they will lose eligibility for free unlimited lines and the credits will be removed</li>
+      </ul>
+      <p style="font-size:14px; color:#000;">Promo Code: **ONEFOR10**</p>
+    `;
+  }  
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
       <html>
@@ -535,6 +603,27 @@
   <p style="font-size:14px; color:#000;">*Switch & Save requires an Unlimited Max mobile plan.</p>
       `;
     }
+
+     if (isTenDollarPromo) {
+    legalFinePrint += `
+      <div style="margin-top:1em; border-top: 1px solid #ccc; padding-top: 1em;">
+        <p style="font-weight:bold; color:#000;">$10 Deal Fine Print:</p>
+        <ul>
+          <li>Must port-in or finance a device</li>
+          <li>After 12 months customer would roll to $25 for one line</li>
+          <li>Customer must take Unlimited mobile plan to qualify</li>
+          <li>1GB, 5GB and Unlimited Max plans do not qualify</li>
+          <li>Max of 1 line</li>
+          <li>Cannot be combined with other mobile service offers</li>
+          <li>Port-in must be completed within 21 days to be eligible</li>
+          <li>Any fixed internet speed, must have internet service</li>
+          <li>Credits will continue for 12 months starting at first month the credit is received</li>
+          <li>If customer disconnects fixed internet service within 12-month period or no longer takes qualify unlimited plan they will lose eligibility for free unlimited lines and the credits will be removed</li>
+        </ul>
+        <p style="font-size:14px; color:#000;">Promo Code: **ONEFOR10**</p>
+      </div>
+    `;
+  }
   
   const printWindow = window.open('', '_blank');
     printWindow.document.write(`
