@@ -53,7 +53,7 @@
             font-weight: normal;
             font-size: 0.95em;
             margin-top: 0.75em;
-            color: #333; /* This will make the fine print a darker gray */
+            color: #333;
         }
 
         button {
@@ -172,6 +172,8 @@
     <img id="optimumLogo" alt="Optimum Logo" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Optimum_logo.png"
          style="display:block; margin: 0 auto 1em; max-width: 200px;"/>
     <h1>Mobile Promo Flow Tool</h1>
+
+    <!-- STEP 1 -->
     <div class="question" id="step1">
         <p>Is the customer a new internet subscriber or under 90 days?</p>
         <button onclick="isUnder90Days = true; isSwitchAndSaveEligible = true; fullSummary += '✅ Eligible for our Switch & Save program!\nUp to $2,000 back for paying off phones with other carriers.\n'; goToStep('internetSpeedCheck')">Yes</button>
@@ -180,10 +182,9 @@
 
     <div class="question hidden" id="internetCheck">
         <p>Does the customer currently have internet service?</p>
-        <button onclick="fullSummary += '✅ Eligible for our Switch & Save program!\nUp to $2,000 back for paying off phones with other carriers.\n'; isSwitchAndSaveEligible = true; goToStep('hasInternet')">Yes</button>
-        <button onclick="fullSummary += '⚠️ Customer does not have Optimum internet.\n'; isSwitchAndSaveEligible = false; goToStep('hasInternet')">No</button>
+        <button onclick="fullSummary += '✅ Eligible for our Switch & Save program!\nUp to $2,000 back for paying off phones with other carriers.\n'; isSwitchAndSaveEligible = true; goToStep('dealChooser')">Yes</button>
+        <button onclick="fullSummary += '⚠️ Customer does not have Optimum internet.\n'; isSwitchAndSaveEligible = false; goToStep('dealChooser')">No</button>
     </div>
-
 
     <div class="question hidden" id="noInternet">
         <p>Promo not available. Customer must have Optimum internet.</p>
@@ -193,8 +194,9 @@
     <div class="question hidden" id="internetSpeedCheck">
         <p>Now, does the customer have 500 mbps or higher?</p>
         <button onclick="goToStep('under90highspeed')">Yes</button>
-        <button onclick="goToStep('hasInternet')">No</button>
+        <button onclick="goToStep('dealChooser')">No</button>
     </div>
+
     <div class="question hidden" id="under90highspeed">
         <p>How many mobile lines is the customer adding?</p>
         <button onclick="showResult('1 line free (After 12 months: $45/mo) - Promo: HEYITSFREE')">1 Line</button>
@@ -208,11 +210,16 @@
         <button onclick="showResult('$207 for 9 lines ($23/line) (After 12 months: $225/mo) - Promo: HEYITSFREE')">9 Lines</button>
         <button onclick="showResult('$230 for 10 lines ($23/line) (After 12 months: $250/mo) - Promo: HEYITSFREE')">10 Lines</button>
     </div>
-    <div class="question hidden" id="hasInternet">
-        <p>Is there a $10 Deal active?</p>
-        <button onclick="goToStep('boostYes')">Yes</button>
-        <button onclick="goToStep('boostNo')">No</button>
+
+    <!-- Deal chooser -->
+    <div class="question hidden" id="dealChooser">
+        <p>Which deal is active?</p>
+        <button onclick="goToStep('boostYes')">$10 Deal</button>
+        <button onclick="activateTwoFor30()">2 for $30</button>
+        <button onclick="goToStep('boostNo')">Neither</button>
     </div>
+
+    <!-- $10 Deal -->
     <div class="question hidden" id="boostYes">
         <p>How many mobile lines?</p>
         <button onclick="showResult('$10 for 1 line (After 12 months: $45/mo) - Promo: ONEFOR10')">1 Line</button>
@@ -226,6 +233,8 @@
         <button onclick="showResult('$210 for 9 lines (After 12 months: $225/mo) - Promo: ONEFOR10')">9 Lines</button>
         <button onclick="showResult('$235 for 10 lines (After 12 months: $250/mo) - Promo: ONEFOR10')">10 Lines</button>
     </div>
+
+    <!-- Neither -->
     <div class="question hidden" id="boostNo">
         <p>How many mobile lines?</p>
         <button onclick="showResult('$25 for 1 line (After 12 months: $45/mo) - Promo: ONEFOR25')">1 Line</button>
@@ -257,6 +266,8 @@
             <p>"Switch & Save" Program does not require trade-in or port-in but requires device financing</p>
             <p>Home Internet required for eligibility with "Switch & Save"</p>
             <p>"Switch & Save" requires Unlimited Max plan</p>
+
+            <!-- $10 Deal fine print -->
             <div id="tenDollarPromoDisclaimer" class="hidden">
                 <hr>
                 <p style="font-weight: bold;">$10 Deal Fine Print:</p>
@@ -272,7 +283,30 @@
                     <li>Credits will continue for 12 months starting at first month the credit is received</li>
                     <li>If customer disconnects fixed internet service within 12-month period or no longer takes qualify unlimited plan they will lose eligibility for free unlimited lines and the credits will be removed</li>
                 </ul>
-                <p>Promo Code: **ONEFOR10**</p>
+                <p>Promo Code: <strong>ONEFOR10</strong></p>
+            </div>
+
+            <!-- 2 for $30 fine print (customer-oriented) -->
+            <div id="twoFor30Disclaimer" class="hidden">
+                <hr>
+                <p style="font-weight: bold;">2 for $30 — Offer Details</p>
+                <ul>
+                    <li>Available in all markets (East & West).</li>
+                    <li>New customers only.</li>
+                    <li>Get 2 unlimited mobile lines for $30/month total ($15 per line).</li>
+                    <li>1st line: $0/month for 12 months when you bring your number (port-in required within 21 days).</li>
+                    <li>2nd line: $30/month for 12 months when you bring your number or finance a device.</li>
+                    <li>After 12 months, the 1st line will be $25/month.</li>
+                    <li>Requires an unlimited mobile plan (1GB, 5GB, and Unlimited Max do not qualify).</li>
+                    <li>Requires exactly 2 unlimited lines.</li>
+                    <li>Cannot be combined with the $10 Deal (ONEFOR10) or other mobile service offers.</li>
+                    <li>Can be combined with mobile device offers.</li>
+                    <li>Requires Optimum Internet service of 300 Mbps or higher.</li>
+                    <li>Credits start within the first billing cycle and continue for 12 months.</li>
+                    <li>If internet service or a qualifying plan is canceled within 12 months, discounted pricing and credits will be removed.</li>
+                    <li>Not available to business accounts.</li>
+                </ul>
+                <p>Promo Code: <strong>TWOFOR30</strong></p>
             </div>
         </div>
         <div style="text-align:center; margin-top:1em;">
@@ -295,29 +329,31 @@
             </a>
         </div>
     </div>
+
     <div class="question hidden" id="devicePrompt">
         <p>Would the customer like to add a mobile device?</p>
         <button onclick="handleDeviceSelection('no')">No</button>
         <button onclick="goToStep('modelSelect')">Yes</button>
     </div>
+
     <div class="question hidden" id="modelSelect">
         <p>Select Mobile Devices:</p>
         <div class="search-container">
             <input type="text" id="deviceSearch" placeholder="Search for a device...">
         </div>
         <form id="deviceForm">
-            <div id="deviceList">
-                </div>
+            <div id="deviceList"></div>
             <hr style="margin: 1.5em 0;"/>
             <strong style="font-size: 1.1em;">Choose an Add-On Device</strong><br/><br/>
-            <div id="addOnDeviceList">
-                </div>
+            <div id="addOnDeviceList"></div>
         </form>
         <button onclick="processMultipleDevices()">Add Selected Devices</button>
     </div>
 </div>
+
 <script>
     let isTenDollarPromo = false;
+    let isTwoFor30 = false;
     let isFinancingElsewhere = false;
     let isUnder90Days = false;
     let isSwitchAndSaveEligible = false;
@@ -326,6 +362,7 @@
     let fullSummary = "";
     let selectedServiceCost = 0;
     let manualDeviceText = "";
+
     let devices = [
         { name: "iPhone 15", monthlyCost: 6.37, promo: "Up to $500 off with trade-in", type: "phone" },
         { name: "iPhone 15 Plus", monthlyCost: 9.14, promo: "Up to $500 off with trade-in", type: "phone" },
@@ -381,11 +418,7 @@
 
         deviceItems.forEach(item => {
             const deviceName = item.querySelector('label').textContent.toLowerCase();
-            if (deviceName.includes(query)) {
-                item.classList.remove('hidden');
-            } else {
-                item.classList.add('hidden');
-            }
+            item.classList.toggle('hidden', !deviceName.includes(query));
         });
     }
 
@@ -396,20 +429,22 @@
         if (step !== 'result') document.getElementById('result').classList.add('hidden');
     }
 
+    function activateTwoFor30() {
+        isTwoFor30 = true;
+        showResult('$30 for 2 lines ($15/line) (After 12 months: first line $25/mo) - Promo: TWOFOR30');
+    }
+
     function showResult(text) {
         const beforeAfter = text.split('After')[0];
         const match = beforeAfter.match(/\$([\d.]+)/);
         selectedServiceCost = match ? parseFloat(match[1]) : 0;
-        
-        if (text.includes("ONEFOR10")) {
-            isTenDollarPromo = true;
-        } else {
-            isTenDollarPromo = false;
-        }
+
+        isTenDollarPromo = text.includes("ONEFOR10");
+        isTwoFor30 = text.includes("TWOFOR30");
 
         fullSummary = "Recommended Offer: " + text;
         serviceTotal = selectedServiceCost;
-        
+
         manualDeviceText = "";
         deviceTotal = 0;
 
@@ -430,12 +465,20 @@
     function displayFinalResult() {
         if (!serviceTotal) serviceTotal = selectedServiceCost;
 
+        if (isTwoFor30) {
+            const lines = getMobileLineCount();
+            if (lines !== 2) {
+                alert('The 2 for $30 offer requires exactly 2 unlimited lines.');
+                return;
+            }
+        }
+
         let finalDeviceTotal = 0;
         let deviceSummaryText = "";
-        
+
         const form = document.getElementById("deviceForm");
         const checkboxes = form.querySelectorAll("input[name=device]:checked");
-        
+
         checkboxes.forEach(cb => {
             const [label, costStr, promo] = cb.value.split("|");
             const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
@@ -444,14 +487,11 @@
             deviceSummaryText += `\n${qty}x ${label} - $${monthlyCost}/mo each (${promo})`;
         });
 
-        if (isTenDollarPromo) {
-            document.getElementById('tenDollarPromoDisclaimer').classList.remove('hidden');
-        } else {
-            document.getElementById('tenDollarPromoDisclaimer').classList.add('hidden');
-        }
+        // Toggle disclaimers
+        document.getElementById('tenDollarPromoDisclaimer').classList.toggle('hidden', !isTenDollarPromo);
+        document.getElementById('twoFor30Disclaimer').classList.toggle('hidden', !isTwoFor30);
 
         const total = serviceTotal + finalDeviceTotal;
-
         fullSummary += `${deviceSummaryText}\nEstimated Monthly Total: $${total}`;
 
         if (isSwitchAndSaveEligible && isFinancingElsewhere) {
@@ -471,34 +511,34 @@
         let totalDevices = 0;
         let hasPhone = false;
         let hasIpad = false;
-    
+
         serviceTotal = selectedServiceCost;
-    
+
         checkboxes.forEach(cb => {
             const [label, costStr, promo] = cb.value.split("|");
             const qty = parseInt(form.querySelector(`select[name='qty_${label}']`).value);
             const monthlyCost = parseFloat(costStr);
-    
+
             const isIpad = label.includes("iPad");
             const isPhone = !isIpad;
-    
+
             if (isIpad) hasIpad = true;
             if (isPhone) hasPhone = true;
-    
+
             if (isIpad && !hasPhone) {
                 const extraService = qty * 45;
                 serviceTotal += extraService;
             }
-    
+
             totalDeviceCost += qty * monthlyCost;
             totalDevices += qty;
         });
-    
+
         if (totalDevices > 0 && totalDevices > getMobileLineCount()) {
             alert(`You selected ${totalDevices} device(s), but only ${getMobileLineCount()} mobile line(s). Each device must have a line.`);
             return;
         }
-    
+
         if (totalDevices > 5) {
             const proceed = confirm("Financing is available for up to 5 devices every 90 days. For purchases exceeding this limit, the Pay In Full option remains available.\n\nDo you wish to continue?");
             if (!proceed) return;
@@ -515,12 +555,13 @@
         const match = fullSummary.match(/(\d+)\s+line/);
         return match ? parseInt(match[1]) : 0;
     }
-    
+
     function restartTool() {
         isFinancingElsewhere = false;
         isUnder90Days = false;
         isSwitchAndSaveEligible = false;
         isTenDollarPromo = false;
+        isTwoFor30 = false;
         serviceTotal = 0;
         deviceTotal = 0;
         fullSummary = "";
@@ -536,6 +577,12 @@
         }
         document.querySelectorAll('.question').forEach(q => q.classList.add('hidden'));
         document.getElementById('result').classList.add('hidden');
+
+        const td = document.getElementById('tenDollarPromoDisclaimer');
+        const tf30 = document.getElementById('twoFor30Disclaimer');
+        if (td) td.classList.add('hidden');
+        if (tf30) tf30.classList.add('hidden');
+
         goToStep('step1');
     }
 
@@ -544,7 +591,7 @@
         let legalFinePrint = isUnder90Days
             ? '<p style="margin-top:2em; font-size:14px; color:#000;">*This offer is only valid within 90 days of internet service activation.</p>'
             : '';
-    
+
         if (isSwitchAndSaveEligible) {
             legalFinePrint += `
     <p style="font-size:14px; color:#000;">*Switch & Save does not require a trade-in or port-in.</p>
@@ -569,9 +616,35 @@
                 <li>Credits will continue for 12 months starting at first month the credit is received</li>
                 <li>If customer disconnects fixed internet service within 12-month period or no longer takes qualify unlimited plan they will lose eligibility for free unlimited lines and the credits will be removed</li>
             </ul>
-            <p style="font-size:14px; color:#000;">Promo Code: **ONEFOR10**</p>
+            <p style="font-size:14px; color:#000;">Promo Code: <strong>ONEFOR10</strong></p>
         `;
-        }  
+        }
+
+        if (isTwoFor30) {
+          legalFinePrint += `
+            <div style="margin-top:1em; border-top: 1px solid #ccc; padding-top: 1em;">
+              <p style="font-weight:bold; color:#000;">2 for $30 — Offer Details</p>
+              <ul>
+                <li>Available in all markets.</li>
+                <li>New customers only.</li>
+                <li>2 unlimited mobile lines for $30/month total ($15 per line).</li>
+                <li>1st line: $0/month for 12 months with port-in (within 21 days).</li>
+                <li>2nd line: $30/month for 12 months with port-in or device financing.</li>
+                <li>After 12 months, the 1st line becomes $25/month.</li>
+                <li>Requires an unlimited mobile plan (1GB, 5GB, and Unlimited Max not eligible).</li>
+                <li>Requires exactly 2 unlimited lines.</li>
+                <li>Cannot be combined with the $10 Deal (ONEFOR10) or other mobile service offers.</li>
+                <li>Can be combined with mobile device offers.</li>
+                <li>Requires Optimum Internet 300 Mbps or higher.</li>
+                <li>Credits begin within the first billing cycle and continue for 12 months.</li>
+                <li>If internet service or a qualifying plan is canceled within 12 months, credits are removed.</li>
+                <li>Not available to business accounts.</li>
+              </ul>
+              <p style="font-size:14px; color:#000;">Promo Code: <strong>TWOFOR30</strong></p>
+            </div>
+          `;
+        }
+
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`
             <html>
@@ -621,7 +694,7 @@
         let legalFinePrint = isUnder90Days
             ? '<p style="margin-top:2em; font-size:14px; color:#000;">*This offer is only valid within 90 days of internet service activation.</p>'
             : '';
-    
+
         if (isSwitchAndSaveEligible) {
             legalFinePrint += `
     <p style="font-size:14px; color:#000;">*Switch & Save does not require a trade-in or port-in.</p>
@@ -647,11 +720,36 @@
                     <li>Credits will continue for 12 months starting at first month the credit is received</li>
                     <li>If customer disconnects fixed internet service within 12-month period or no longer takes qualify unlimited plan they will lose eligibility for free unlimited lines and the credits will be removed</li>
                 </ul>
-                <p style="font-size:14px; color:#000;">Promo Code: **ONEFOR10**</p>
+                <p style="font-size:14px; color:#000;">Promo Code: <strong>ONEFOR10</strong></p>
             </div>
         `;
         }
-    
+
+        if (isTwoFor30) {
+          legalFinePrint += `
+            <div style="margin-top:1em; border-top: 1px solid #ccc; padding-top: 1em;">
+              <p style="font-weight:bold; color:#000;">2 for $30 — Offer Details</p>
+              <ul>
+                <li>Available in all markets.</li>
+                <li>New customers only.</li>
+                <li>2 unlimited mobile lines for $30/month total ($15 per line).</li>
+                <li>1st line: $0/month for 12 months with port-in (within 21 days).</li>
+                <li>2nd line: $30/month for 12 months with port-in or device financing.</li>
+                <li>After 12 months, the 1st line becomes $25/month.</li>
+                <li>Requires an unlimited mobile plan (1GB, 5GB, and Unlimited Max not eligible).</li>
+                <li>Requires exactly 2 unlimited lines.</li>
+                <li>Cannot be combined with the $10 Deal (ONEFOR10) or other mobile service offers.</li>
+                <li>Can be combined with mobile device offers.</li>
+                <li>Requires Optimum Internet 300 Mbps or higher.</li>
+                <li>Credits begin within the first billing cycle and continue for 12 months.</li>
+                <li>If internet service or a qualifying plan is canceled within 12 months, credits are removed.</li>
+                <li>Not available to business accounts.</li>
+              </ul>
+              <p style="font-size:14px; color:#000;">Promo Code: <strong>TWOFOR30</strong></p>
+            </div>
+          `;
+        }
+
         const printWindow = window.open('', '_blank');
         printWindow.document.write(`
             <html>
